@@ -1,3 +1,5 @@
+
+
 let formChecker = true;
 
 async function signupHandler(event) {
@@ -12,12 +14,22 @@ async function signupHandler(event) {
     console.log(signupData);
     signupFormValidation(signupData);
     if (formChecker) {
-    const responseData = await axios.post('http://localhost:3000/user/login', signupData, {
+    const responseData = await axios.post('http://localhost:3000/user/login', JSON.stringify(signupData), { 
         headers:{
             'Content-Type':'application/json'
         }
     });
-    console.log(responseData);
+    if (responseData.data && responseData.data.responseMessage === 'Users are created') {
+        // Successful registration
+        console.log('User successfully registered:', responseData.data.userData);
+      } else if (responseData.data && responseData.data.responseMessage === 'Users are all ready exist.') {
+        // User already exists
+        console.log('User already exists:', responseData.data.responseMessage);
+      } else {
+        // Other error scenarios
+        console.error('Error during registration:', responseData.data.responseMessage);
+      }
+   
         
     } else {
         console.log("do nothing");
