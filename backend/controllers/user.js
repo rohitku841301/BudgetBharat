@@ -21,7 +21,6 @@ exports.signupPost = async (req, res, next) => {
         });
       }
     }
-
   } catch (error) {
     res.status(500).json({
       responseMessage: "Something went wrong",
@@ -30,6 +29,31 @@ exports.signupPost = async (req, res, next) => {
   }
 };
 
-exports.signinPost = async(req,res,next)=>{
-  console.log(req.body);
-}
+exports.signinPost = async (req, res, next) => {
+  try {
+    const emailExist = await User.findOne({ where: { email: req.body.email } });
+    console.log(emailExist);
+    if(emailExist){
+      if(emailExist.password === req.body.password){
+        console.log("Password correct");
+        return res.status(200).json({
+          responseMessage: "Login Successful",
+          userData: emailExist
+        })
+      }else{
+        return res.status(401).json({
+          responseMessage: "Password Incorrect"
+        })
+      }
+    }else{
+      return res.status(404).json({
+        responseMessage: "Email Not Exist"
+      })
+    }
+  } catch (error) {
+    return res.status(500).json({
+      responseMessage: "Something Went Wrong",
+      error: error,
+    });
+  }
+};
