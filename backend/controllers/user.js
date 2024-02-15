@@ -1,6 +1,6 @@
 const User = require("../models/user");
 
-exports.postUserData = async (req, res, next) => {
+exports.signupPost = async (req, res, next) => {
   try {
     const userExist = await User.findOne({ where: { email: req.body.email } });
     console.log(userExist);
@@ -29,3 +29,7 @@ exports.postUserData = async (req, res, next) => {
     });
   }
 };
+
+exports.signinPost = async(req,res,next)=>{
+  console.log(req.body);
+}
