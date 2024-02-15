@@ -3,9 +3,10 @@ const User = require("../models/user");
 exports.postUserData = async (req, res, next) => {
   try {
     const userExist = await User.findOne({ where: { email: req.body.email } });
+    console.log(userExist);
     if (userExist) {
-      res.status(401).json({
-        responseMessage: "Users are all ready exist.",
+      res.status(409).json({
+        responseMessage: "Email Already Exist",
       });
     } else {
       const userData = await User.create(req.body);
@@ -15,14 +16,14 @@ exports.postUserData = async (req, res, next) => {
           userData: userData,
         });
       } else {
-        res.status(401).json({
-          responseMessage: "Users are not created",
+        res.status(500).json({
+          responseMessage: "Something went wrong",
         });
       }
     }
 
   } catch (error) {
-    res.status(501).json({
+    res.status(500).json({
       responseMessage: "Something went wrong",
       error: error,
     });

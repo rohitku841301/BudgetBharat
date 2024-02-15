@@ -11,7 +11,7 @@ async function signupHandler(event) {
       email: event.target.email.value,
       password: event.target.password.value,
     };
-    console.log(signupData);
+ 
     signupFormValidation(signupData);
     if (formChecker) {
     const responseData = await axios.post('http://localhost:3000/user/login', JSON.stringify(signupData), { 
@@ -19,23 +19,32 @@ async function signupHandler(event) {
             'Content-Type':'application/json'
         }
     });
-    if (responseData.data && responseData.data.responseMessage === 'Users are created') {
-        // Successful registration
-        console.log('User successfully registered:', responseData.data.userData);
-      } else if (responseData.data && responseData.data.responseMessage === 'Users are all ready exist.') {
-        // User already exists
-        console.log('User already exists:', responseData.data.responseMessage);
-      } else {
-        // Other error scenarios
-        console.error('Error during registration:', responseData.data.responseMessage);
+      if(responseData.status === 201){
+        document.getElementById('successAlert').style.display = 'block';
+      document.getElementById('warning').style.display = 'none';
+      document.getElementById('danger').style.display = 'none';
+
+
+        console.log("signup success");
       }
-   
         
     } else {
         console.log("do nothing");
     }
   } catch (error) {
-    console.log(error);
+    
+    if(error.response.status === 409){
+      document.getElementById('warning').style.display = 'block';
+      document.getElementById('successAlert').style.display = 'none';
+      document.getElementById('danger').style.display = 'none';
+
+
+    }else{
+      document.getElementById('warning').style.display = 'none';
+      document.getElementById('successAlert').style.display = 'block';
+      document.getElementById('danger').style.display = 'block';
+    }
+  
   }
 }
 

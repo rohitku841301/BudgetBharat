@@ -25,7 +25,7 @@
         display: flex;
         justify-content: left;
         color: #ffd60a;
-        font-family:Georgia, 'Times New Roman', Times, serif;
+        font-family: Georgia, "Times New Roman", Times, serif;
       }
       .col img {
         max-width: 100%;
@@ -37,7 +37,6 @@
         width: 60%;
       }
       .signup-btn {
-       
         width: 65%;
         display: flex;
         justify-content: center;
@@ -45,14 +44,13 @@
       .mtt {
         margin-top: 30px;
       }
-      .btn{
+      .btn {
         color: #003566;
       }
-     
-      .error{
+
+      .error {
         color: red;
       }
-
     </style>
   </head>
   <body>
@@ -97,6 +95,28 @@
             <img src="signup_illustration.svg" alt="signup_illustration" />
           </div>
           <div class="col">
+
+            <div class="alert alert-primary" id="successAlert" role="alert" style="display:none;">
+              Users Created Successfully.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div class="alert alert-warning" id="warning" role="alert" style="display:none;">
+              Email Already Exist.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div class="alert alert-danger" id="danger" role="alert" style="display:none;">
+              Something Went Wrong.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
             <div class="signup-heading mt-5">
               <h2>Join Budget Bharat! 🚀</h2>
             </div>
@@ -104,44 +124,41 @@
             <form onsubmit="signupHandler(event)" class="formbox">
               <div class="row mt-3 input-width">
                 <label class="col-sm-10" for="colFormLabelLg1"></label>
-                  <input
-                    type="text"
-                    name="name"
-                    class="form-control"
-                    id="colFormLabelLg1"
-                    placeholder="name"
-                    autocomplete="name"
-                  />
-                  <div class="error"><p id="error1"></p></div>
-              
+                <input
+                  type="text"
+                  name="name"
+                  class="form-control"
+                  id="colFormLabelLg1"
+                  placeholder="name"
+                  autocomplete="name"
+                />
+                <div class="error"><p id="error1"></p></div>
               </div>
 
               <div class="row mtt input-width">
                 <label class="col-sm-10" for="colFormLabelLg2"></label>
-                  <input
-                    type="email"
-                    name="email"
-                    class="form-control"
-                    id="colFormLabelLg2"
-                    placeholder="email"
-                    autocomplete="email"
-                  />
-                  <div class="error"><p id="error2"></p></div>
-
+                <input
+                  type="email"
+                  name="email"
+                  class="form-control"
+                  id="colFormLabelLg2"
+                  placeholder="email"
+                  autocomplete="email"
+                />
+                <div class="error"><p id="error2"></p></div>
               </div>
 
               <div class="row mtt input-width">
                 <label class="col-sm-10" for="colFormLabelLg3"></label>
-                  <input
-                    type="password"
-                    name="password"
-                    class="form-control"
-                    id="colFormLabelLg3"
-                    placeholder="password"
-                    autocomplete="new-password"
-                  />
-                  <div class="error"><p id="error3"></p></div>
-
+                <input
+                  type="password"
+                  name="password"
+                  class="form-control"
+                  id="colFormLabelLg3"
+                  placeholder="password"
+                  autocomplete="new-password"
+                />
+                <div class="error"><p id="error3"></p></div>
               </div>
 
               <div class="signup-btn mt-4">
@@ -153,8 +170,12 @@
       </div>
     </div>
 
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="index.js"></script>
-
   </body>
 </html>
