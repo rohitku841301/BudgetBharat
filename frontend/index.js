@@ -59,16 +59,15 @@ async function signinHandler(event) {
           },
         }
       );
-      console.log(responseData);
-          if (responseData.status === 200) {
-            document.getElementById("successMessage").innerHTML =
+      if (responseData) {
+        if (responseData.status === 200) {
+          document.getElementById("successMessage").innerHTML =
             responseData.data.responseMessage;
-            document.getElementById("successAlert").style.display = "block";
-            document.getElementById("warning").style.display = "none";
-            document.getElementById("danger").style.display = "none";
-          }
-        
- 
+          document.getElementById("successAlert").style.display = "block";
+          document.getElementById("warning").style.display = "none";
+          document.getElementById("danger").style.display = "none";
+        }
+      }
     }
   } catch (error) {
     if (error.response.status === 404) {
@@ -85,8 +84,9 @@ async function signinHandler(event) {
       document.getElementById("warning").style.display = "block";
       document.getElementById("danger").style.display = "none";
     } else {
-      document.getElementById("dangerMessage").innerHTML =
-        error.response.data.responseMessage;
+      document.getElementById("dangerMessage").innerHTML = error.response
+        ? error.response.data.responseMessage
+        : "Unknown error";
 
       document.getElementById("successAlert").style.display = "none";
       document.getElementById("warning").style.display = "none";
