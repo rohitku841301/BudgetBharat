@@ -61,6 +61,9 @@ async function signinHandler(event) {
       );
       if (responseData) {
         if (responseData.status === 200) {
+          console.log(responseData);
+          localStorage.setItem('token',responseData.data.token)
+          
           document.getElementById("successMessage").innerHTML =
             responseData.data.responseMessage;
           document.getElementById("successAlert").style.display = "block";

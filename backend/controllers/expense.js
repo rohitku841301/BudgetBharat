@@ -2,13 +2,15 @@ const Expense = require("../models/expense");
 
 exports.addExpense = async (req, res, next) => {
   try {
-    const responseData = await Expense.create(req.body);
+    const responseData = await Expense.create({...req.body, userId:req.existingUser.id});
+    console.log(responseData);
     if (responseData) {
       expenseData = {
         id: responseData.id,
         amount: JSON.parse(responseData.amount),
         description: responseData.description,
         category: responseData.category,
+        
       };
       return res.status(201).json({
         responseMessage: "Successfully Created",
@@ -30,7 +32,7 @@ exports.addExpense = async (req, res, next) => {
 
 exports.getExpense = async (req, res, next) => {
   try {
-    const expenseData = await Expense.findAll();
+    const expenseData = await Expense.findAll({where:{userId:req.existingUser.id}});
     if (expenseData) {
       const allExpenseData = expenseData.map((expenseData) => ({
         id: expenseData.id,
@@ -48,7 +50,6 @@ exports.getExpense = async (req, res, next) => {
         error: error,
       });
     }
-    console.log(allExpenseData);
   } catch (error) {
     return res.status(500).json({
       responseMessage: "Something Went Wrong",

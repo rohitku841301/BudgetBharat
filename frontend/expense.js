@@ -11,12 +11,15 @@ async function addExpenseFormHandler(event) {
       category: event.target.category.value,
     };
     console.log(expenseData);
+    const token = localStorage.getItem("token");
+
     const responseData = await axios.post(
       "http://localhost:3000/expense/add-Expense",
       JSON.stringify(expenseData),
       {
         headers: {
           "Content-Type": "application/json",
+          'Authorization': token,
         },
       }
     );
@@ -48,14 +51,23 @@ async function deleteUserDetail(event) {
 
 window.addEventListener("DOMContentLoaded", async () => {
   try {
+    const token = localStorage.getItem('token');
+    
     const allExpenseDetails = await axios.get(
-      "http://localhost:3000/expense/get-Expense"
+      "http://localhost:3000/expense/get-Expense", {
+        headers:{
+          'Authorization': token
+        }
+      }
     );
     const newObj = allExpenseDetails.data.responseData;
     for (let i = 0; i < newObj.length; i++) {
       showUser(newObj[i]);
     }
   } catch (error) {
+    if(error.response.status === 401){
+      console.log(error.response.data.responseMessage);
+    }
     console.log(error);
   }
 });
