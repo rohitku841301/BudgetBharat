@@ -56,7 +56,7 @@
   <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">BudgetBharat</a>
+        <a class="navbar-brand" href="index.html">BudgetBharat</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -71,16 +71,12 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="index.html">Home</a>
-              </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="signIn.html">Login</a>
+              <a class="nav-link active" aria-current="page" href="signIn.html"
+                >Login</a
+              >
             </li>
             <li class="nav-item">
               <a class="nav-link active" href="signUp.html">Register</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="addExpense.html">Add Expense</a>
             </li>
           </ul>
         </div>
@@ -94,25 +90,54 @@
             <img src="signIn_illustration.svg" alt="signIn_illustration" />
           </div>
           <div class="col">
-
-            <div class="alert alert-primary" id="successAlert" role="alert" style="display:none;">
+            <div
+              class="alert alert-primary"
+              id="successAlert"
+              role="alert"
+              style="display: none"
+            >
               <p id="successMessage"></p>
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <button
+                type="button"
+                class="close"
+                data-dismiss="alert"
+                aria-label="Close"
+              >
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
 
-            <div class="alert alert-warning" id="warning" role="alert" style="display:none;">
+            <div
+              class="alert alert-warning"
+              id="warning"
+              role="alert"
+              style="display: none"
+            >
               <p id="warningMessage"></p>
-             
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+
+              <button
+                type="button"
+                class="close"
+                data-dismiss="alert"
+                aria-label="Close"
+              >
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
 
-            <div class="alert alert-danger" id="danger" role="alert" style="display:none;">
-              <p id="dangerMessage"></p> 
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <div
+              class="alert alert-danger"
+              id="danger"
+              role="alert"
+              style="display: none"
+            >
+              <p id="dangerMessage"></p>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="alert"
+                aria-label="Close"
+              >
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
@@ -122,8 +147,6 @@
             </div>
 
             <form onsubmit="signinHandler(event)" class="formbox">
-              
-
               <div class="row mtt input-width">
                 <label class="col-sm-10" for="colFormLabelLg2"></label>
                 <input
@@ -158,7 +181,6 @@
         </div>
       </div>
     </div>
-
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>

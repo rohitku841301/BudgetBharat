@@ -20,6 +20,7 @@ exports.signupPost = async (req, res, next) => {
               responseMessage: "Users are created",
               userData: userData,
             });
+            console.log("sdj");
           } else {
             res.status(500).json({
               responseMessage: "Something went wrong",

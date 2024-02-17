@@ -12,6 +12,7 @@ exports.authentication = async(req,res,next)=>{
             console.log(decode);
             console.log("pass");
             req.existingUser = decode;
+            req.user = decode.id;
             next();
         }
     })

@@ -27,6 +27,9 @@ async function addExpenseFormHandler(event) {
       showUser(responseData.data.responseData);
     }
   } catch (error) {
+    if(error.response.status === 401 && statusText === "Unauthorized"){
+      window.location.href = 'frontend/addExpense.html';
+    }
     console.log(error);
   }
 }
@@ -65,10 +68,12 @@ window.addEventListener("DOMContentLoaded", async () => {
       showUser(newObj[i]);
     }
   } catch (error) {
-    if(error.response.status === 401){
-      console.log(error.response.data.responseMessage);
-    }
     console.log(error);
+
+    if(error.response.status === 401){
+      window.location.href = 'signIn.html';
+    }
+    
   }
 });
 

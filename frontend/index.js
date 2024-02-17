@@ -24,8 +24,8 @@ async function signupHandler(event) {
         document.getElementById("successAlert").style.display = "block";
         document.getElementById("warning").style.display = "none";
         document.getElementById("danger").style.display = "none";
-
         console.log("signup success");
+        window.location.href = "/frontend/signIn.html"
       }
     }
   } catch (error) {
@@ -63,12 +63,13 @@ async function signinHandler(event) {
         if (responseData.status === 200) {
           console.log(responseData);
           localStorage.setItem('token',responseData.data.token)
-          
+       
           document.getElementById("successMessage").innerHTML =
             responseData.data.responseMessage;
           document.getElementById("successAlert").style.display = "block";
           document.getElementById("warning").style.display = "none";
           document.getElementById("danger").style.display = "none";
+          window.location.href = "/frontend/addExpense.html"
         }
       }
     }
