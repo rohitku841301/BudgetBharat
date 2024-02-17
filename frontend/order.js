@@ -30,8 +30,11 @@ document
                   },
                 }
               );
+              console.log(updatedStatus);
              if(updatedStatus.status === 200){
-              window.location.href = '/frontend/premiumUser.html'
+              localStorage.setItem('token',updatedStatus.data.token)
+              console.log("df");
+              window.location.href = '/frontend/addExpense.html'
              }
             } catch (error) {
               console.log(error);

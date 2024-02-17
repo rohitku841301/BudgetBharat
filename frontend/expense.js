@@ -19,7 +19,7 @@ async function addExpenseFormHandler(event) {
       {
         headers: {
           "Content-Type": "application/json",
-          'Authorization': token,
+          Authorization: token,
         },
       }
     );
@@ -27,8 +27,8 @@ async function addExpenseFormHandler(event) {
       showUser(responseData.data.responseData);
     }
   } catch (error) {
-    if(error.response.status === 401 && statusText === "Unauthorized"){
-      window.location.href = 'frontend/addExpense.html';
+    if (error.response.status === 401 && statusText === "Unauthorized") {
+      window.location.href = "frontend/addExpense.html";
     }
     console.log(error);
   }
@@ -52,17 +52,54 @@ async function deleteUserDetail(event) {
   }
 }
 
+function parseJwt(token) {
+  var base64Url = token.split(".")[1];
+  var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  var jsonPayload = decodeURIComponent(
+    window
+      .atob(base64)
+      .split("")
+      .map(function (c) {
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join("")
+  );
+
+  return JSON.parse(jsonPayload);
+}
+
+async function premiumUserFunctionality(token) {
+  const payload = parseJwt(token);
+  if(payload.isPremium){
+    document.getElementById("disappear").style.display = "none";
+    document.getElementById("premium").innerHTML = "premium user";
+    const leaderboard = document.createElement("button");
+    leaderboard.innerText = "Leaderboard"
+    const form = document.querySelector("form");
+    form.prepend(leaderboard)
+
+  }
+
+}
+
 window.addEventListener("DOMContentLoaded", async () => {
   try {
-    const token = localStorage.getItem('token');
-    
+    const token = localStorage.getItem("token");
+
+    premiumUserFunctionality(token);
+
     const allExpenseDetails = await axios.get(
-      "http://localhost:3000/expense/get-Expense", {
-        headers:{
-          'Authorization': token
-        }
+      "http://localhost:3000/expense/get-Expense",
+      {
+        headers: {
+          Authorization: token,
+        },
       }
     );
+    console.log(allExpenseDetails);
+    // if()
+    // document.getElementById("buyPremiumHandler").innerHTML = "Premium User⭐"
+
     const newObj = allExpenseDetails.data.responseData;
     for (let i = 0; i < newObj.length; i++) {
       showUser(newObj[i]);
@@ -70,10 +107,9 @@ window.addEventListener("DOMContentLoaded", async () => {
   } catch (error) {
     console.log(error);
 
-    if(error.response.status === 401){
-      window.location.href = 'signIn.html';
+    if (error.response.status === 401) {
+      window.location.href = "signIn.html";
     }
-    
   }
 });
 

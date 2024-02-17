@@ -1,6 +1,8 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+
+const jwtToken = require('../utils/generateToken')
+
 
 exports.signupPost = async (req, res, next) => {
   try {
@@ -14,7 +16,11 @@ exports.signupPost = async (req, res, next) => {
       bcrypt.hash(req.body.password, 5, async (err, hash) => {
         try {
           console.log(hash);
-          const userData = await User.create({ ...req.body, password: hash });
+          const userData = await User.create({
+            ...req.body,
+            password: hash,
+            isPremium: false,
+          });
           if (userData) {
             res.status(201).json({
               responseMessage: "Users are created",
@@ -58,27 +64,11 @@ exports.signinPost = async (req, res, next) => {
           } else {
             console.log(result);
             if (result) {
-              jwt.sign(
-                {
-                  id: emailExist.id,
-                  name: emailExist.name,
-                  email: emailExist.email,
-                },
-                "qwerty",
-                (err, token) => {
-                  if (err) {
-                    return res.status(500).json({
-                      responseMessage: "Something Went Wrong",
-                      error: err,
-                    });
-                  } else {
-                    return res.status(200).json({
-                      responseMessage: "Login Successful",
-                      token: token,
-                    });
-                  }
-                }
-              );
+              const token = await jwtToken(emailExist.id, emailExist.email, emailExist.isPremium);
+              return res.status(200).json({
+                responseMessage: "Login Successful",
+                token: token,
+              });
             } else {
               return res.status(401).json({
                 responseMessage: "Password Incorrect",
