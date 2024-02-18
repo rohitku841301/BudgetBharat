@@ -39,8 +39,14 @@ async function deleteUserDetail(event) {
     const parent = event.target.parentNode;
     expenseId = parent.querySelector(".id").innerText;
     console.log(expenseId);
+    const token = localStorage.getItem("token");
     const deletedExpense = await axios.delete(
-      `http://localhost:3000/expense/delete-Expense/${expenseId}`
+      `http://localhost:3000/expense/delete-Expense/${expenseId}`,
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
     );
     console.log(deletedExpense);
     parent.remove();

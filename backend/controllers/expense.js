@@ -3,18 +3,29 @@ const Expense = require("../models/expense");
 const User = require("../models/user");
 
 exports.addExpense = async (req, res, next) => {
+  console.log(req.existingUser);
+  let t;
   try {
+    t = await sequelize.transaction();
     console.log("djs");
-    const responseData = await Expense.create({
-      ...req.body,
-      userId: req.existingUser.id,
-    });
+    const responseData = await Expense.create(
+      {
+        ...req.body,
+        userId: req.existingUser.id,
+      },
+      { transaction: t }
+    );
     console.log("skjbj");
-    const totalAmount = await Expense.sum('amount', {
-      where: { userId: req.existingUser.id }
+    const totalAmount = await Expense.sum("amount", {
+      where: { userId: req.existingUser.id },
+      transaction: t,
     });
 
-    await User.update({ totalAmount:totalAmount }, { where: { id: req.existingUser.id } });
+    await User.update(
+      { totalAmount: totalAmount },
+      { where: { id: req.existingUser.id }, transaction: t }
+    );
+    await t.commit();
     console.log(responseData);
     if (responseData) {
       expenseData = {
@@ -34,6 +45,7 @@ exports.addExpense = async (req, res, next) => {
       });
     }
   } catch (error) {
+    await t.rollback();
     return res.status(500).json({
       responseMessage: "Something Went Wrong",
       error: error,
@@ -72,24 +84,37 @@ exports.getExpense = async (req, res, next) => {
 };
 
 exports.deleteExpense = async (req, res, next) => {
+  let t;
   try {
+    t = await sequelize.transaction();
     const id = req.params.id;
     const deletedExpenseData = await Expense.destroy({
-      where: {
-        id: id,
-      },
+      where: { id: id },
+      transaction: t
     });
+    console.log("dnsj", deletedExpenseData);
+    
+    const totalAmount = await Expense.sum("amount", {
+      where: { userId: req.existingUser.id },
+      transaction: t,
+    });
+
+    await User.update(
+      { totalAmount: totalAmount },
+      { where: { id: req.existingUser.id }, transaction: t }
+    );
+    await t.commit();
     if (deletedExpenseData > 0) {
-      return res
-        .status(200)
-        .json({
-          responseMessage: "Expense deleted successfully",
-          deletedExpenseData: deletedExpenseData,
-        });
+      return res.status(200).json({
+        responseMessage: "Expense deleted successfully",
+        deletedExpenseData: deletedExpenseData,
+      });
     } else {
       return res.status(500).json({ responseMessage: "Something Went Wrong" });
     }
   } catch (error) {
+    if (t) await t.rollback();
+    console.error("Error:", error);
     return res.status(500).json({
       responseMessage: "Something Went Wrong",
       error: error,
@@ -100,9 +125,9 @@ exports.deleteExpense = async (req, res, next) => {
 exports.showLeaderboard = async (req, res, next) => {
   try {
     const result = await User.findAll({
-      attributes: ["id","name","totalAmount"],
-      order: [["totalAmount", "DESC"]]
-    })
+      attributes: ["id", "name", "totalAmount"],
+      order: [["totalAmount", "DESC"]],
+    });
     // const result = await User.findAll({
     //   attributes: [
     //     "id",
@@ -126,7 +151,7 @@ exports.showLeaderboard = async (req, res, next) => {
         responseMessage: "get all data",
         responseData: result,
       });
-    }else{
+    } else {
       res.status(500).json({
         responseMessage: "something went wrong",
       });
