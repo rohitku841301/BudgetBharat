@@ -24,7 +24,8 @@ app.use(
 
 app.use("/user", userRoute);
 app.use("/expense", expenseRoute);
-app.use('/order', orderRoute)
+app.use('/order', orderRoute);
+
 
 User.hasMany(Expense);
 Expense.belongsTo(User);

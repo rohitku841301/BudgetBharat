@@ -68,18 +68,43 @@ function parseJwt(token) {
   return JSON.parse(jsonPayload);
 }
 
+async function showLeaderboard(event) {
+  try {
+    event.preventDefault();
+    const responseData = await axios.get(
+      "http://localhost:3000/expense/premium/leaderboard"
+    );
+    if (responseData.status === 200) {
+      const div = document.createElement("div");
+
+      responseData.data.responseData.map((response) => {
+        console.log(response);
+        const p = document.createElement("p");
+        p.innerText = `${response.id} , ${response.name} , ${response.total_amount}`;
+        div.append(p);
+      });
+      const leaderboard = document.querySelector(".leaderboard");
+      leaderboard.after(div);
+    }
+
+    console.log(responseData);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function premiumUserFunctionality(token) {
   const payload = parseJwt(token);
-  if(payload.isPremium){
+  if (payload.isPremium) {
     document.getElementById("disappear").style.display = "none";
     document.getElementById("premium").innerHTML = "premium user";
     const leaderboard = document.createElement("button");
-    leaderboard.innerText = "Leaderboard"
+    leaderboard.innerText = "Leaderboard";
+    leaderboard.classList.add("leaderboard");
+    leaderboard.setAttribute("onclick", "showLeaderboard(event)");
     const form = document.querySelector("form");
-    form.prepend(leaderboard)
-
+    form.after(leaderboard);
   }
-
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
