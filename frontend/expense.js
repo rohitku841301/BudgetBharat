@@ -80,7 +80,7 @@ async function showLeaderboard(event) {
       responseData.data.responseData.map((response) => {
         console.log(response);
         const p = document.createElement("p");
-        p.innerText = `${response.id} , ${response.name} , ${response.total_amount}`;
+        p.innerText = `UserID - ${response.id}, Name - ${response.name}, Total Amount - ${response.totalAmount}`;
         div.append(p);
       });
       const leaderboard = document.querySelector(".leaderboard");

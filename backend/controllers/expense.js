@@ -4,10 +4,17 @@ const User = require("../models/user");
 
 exports.addExpense = async (req, res, next) => {
   try {
+    console.log("djs");
     const responseData = await Expense.create({
       ...req.body,
       userId: req.existingUser.id,
     });
+    console.log("skjbj");
+    const totalAmount = await Expense.sum('amount', {
+      where: { userId: req.existingUser.id }
+    });
+
+    await User.update({ totalAmount:totalAmount }, { where: { id: req.existingUser.id } });
     console.log(responseData);
     if (responseData) {
       expenseData = {
@@ -93,23 +100,27 @@ exports.deleteExpense = async (req, res, next) => {
 exports.showLeaderboard = async (req, res, next) => {
   try {
     const result = await User.findAll({
-      attributes: [
-        "id",
-        "name",
-        [sequelize.fn("sum", sequelize.col("Expenses.amount")), "total_amount"],
-      ],
-      include: [
-        {
-          model: Expense,
-          attributes: [],
-          where: sequelize.literal("`User`.`id` = `Expenses`.`userId`"),
-          required: false,
-        },
-      ],
-      group: ["User.id"],
-      having: sequelize.literal("`total_amount` > 0"),
-    });
-
+      attributes: ["id","name","totalAmount"],
+      order: [["totalAmount", "DESC"]]
+    })
+    // const result = await User.findAll({
+    //   attributes: [
+    //     "id",
+    //     "name",
+    //     [sequelize.fn("sum", sequelize.col("Expenses.amount")), "total_amount"],
+    //   ],
+    //   include: [
+    //     {
+    //       model: Expense,
+    //       attributes: [],
+    //       where: sequelize.literal("`User`.`id` = `Expenses`.`userId`"),
+    //       required: false,
+    //     },
+    //   ],
+    //   group: ["User.id"],
+    //   having: sequelize.literal("`total_amount` > 0"),
+    // });
+    console.log(result);
     if (result) {
       res.status(200).json({
         responseMessage: "get all data",
