@@ -91,6 +91,95 @@ async function showLeaderboard(event) {
       });
       const leaderboard = document.querySelector(".leaderboard");
       leaderboard.after(div);
+
+      const container = document.querySelector(".container");
+      container.innerHTML = `<div class="container text-center">
+      <div class="row">
+        <div class="col">
+          <h1>Day to Day Expenses</h1>
+          <table class="table table-success table-striped-columns">
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Description</th>
+                <th scope="col">Category</th>
+                <th scope="col">Income</th>
+                <th scope="col">Expense</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              
+            </tbody>
+          </table>
+      
+          <h2>Yearly Report</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Month</th>
+                <th scope="col">Income</th>
+                <th scope="col">Expense</th>
+                <th scope="col">Saving</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td colspan="2">Larry the Bird</td>
+                <td>@twitter</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>Notes Report 2021</p>
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Notes</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+              </tr>
+            
+            </tbody>
+          </table>
+        </div>
+        
+      </div>
+    </div>`
     }
 
     console.log(responseData);

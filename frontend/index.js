@@ -25,7 +25,7 @@ async function signupHandler(event) {
         document.getElementById("warning").style.display = "none";
         document.getElementById("danger").style.display = "none";
         console.log("signup success");
-        window.location.href = "/frontend/signIn.html"
+        window.location.href = "/frontend/signIn.html";
       }
     }
   } catch (error) {
@@ -62,14 +62,14 @@ async function signinHandler(event) {
       if (responseData) {
         if (responseData.status === 200) {
           console.log(responseData);
-          localStorage.setItem('token',responseData.data.token)
-       
+          localStorage.setItem("token", responseData.data.token);
+
           document.getElementById("successMessage").innerHTML =
             responseData.data.responseMessage;
           document.getElementById("successAlert").style.display = "block";
           document.getElementById("warning").style.display = "none";
           document.getElementById("danger").style.display = "none";
-          window.location.href = "/frontend/addExpense.html"
+          window.location.href = "/frontend/addExpense.html";
         }
       }
     }
@@ -133,5 +133,30 @@ function signupFormValidation({ name, email, password }) {
   }
   if (!name && !email && !password) {
     formChecker = false;
+  }
+}
+
+async function forgetPasswordHandler(event) {
+  try {
+    event.preventDefault();
+    const forgetEmail = {
+      email: event.target.forgetEmail.value,
+    };
+    const forgetEmailData = await axios.post(
+      "http://localhost:3000/user/password/forget-password",
+      JSON.stringify(forgetEmail),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(forgetEmailData);
+  } catch (error) {
+    if(error.response.status === 404){
+      console.log(error.response.data.responseMessage);
+    }else{
+    console.log(error);
+    }
   }
 }

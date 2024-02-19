@@ -1,8 +1,14 @@
+const nodemailer = require("nodemailer");
+require("dotenv").config();
+
+const Sib = require("sib-api-v3-sdk");
+
+console.log(process.env.API_KEY);;
+
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 
-const jwtToken = require('../utils/generateToken')
-
+const jwtToken = require("../utils/generateToken");
 
 exports.signupPost = async (req, res, next) => {
   try {
@@ -64,7 +70,11 @@ exports.signinPost = async (req, res, next) => {
           } else {
             console.log(result);
             if (result) {
-              const token = await jwtToken(emailExist.id, emailExist.email, emailExist.isPremium);
+              const token = await jwtToken(
+                emailExist.id,
+                emailExist.email,
+                emailExist.isPremium
+              );
               return res.status(200).json({
                 responseMessage: "Login Successful",
                 token: token,
@@ -86,6 +96,71 @@ exports.signinPost = async (req, res, next) => {
     return res.status(500).json({
       responseMessage: "Something Went Wrong",
       error: error,
+    });
+  }
+};
+
+exports.forgetPassword = async (req, res, next) => {
+  try {
+    console.log("dskjn");
+    const email = req.body.email;
+    const forgetEmail = await User.findOne({
+      where: { email: req.body.email },
+    });
+    if (forgetEmail) {
+      const client = Sib.ApiClient.instance;
+      const apiKey = client.authentications["api-key"];
+      apiKey.apiKey = process.env.API_KEY;
+      let transporter = new Sib.TransactionalEmailsApi();
+
+      const sender = {
+        email: "rohitku841301@gmail.com",
+        name: "S***der",
+      };
+      const receivers = [
+        {
+          email: req.body.email,
+        },
+      ];
+
+      try {
+        let info = await transporter.sendTransacEmail({
+          sender: sender,
+          to: receivers,
+          subject: "Reset password OTP",
+          textContent: `Dear, Your OTP is: `,
+        });
+        console.log("result", info);
+
+        return res.status(200).json({
+          responseMessage: "email sent successfully",
+        });
+      } catch (error) {
+        console.log("Error sending email:", error);
+
+        if (
+          error.response &&
+          error.response.body &&
+          error.response.body.code === "unauthorized"
+        ) {
+          return res.status(401).json({
+            responseMessage: "Unauthorized access to Sendinblue API",
+          });
+        }
+
+        return res.status(500).json({
+          responseMessage: "Error sending email",
+        });
+      }
+      // console.log(info);
+    } else {
+      return res.status(404).json({
+        responseMessage: "Email not found",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      responseMessage: "Something Went Wrong",
     });
   }
 };
