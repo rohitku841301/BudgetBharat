@@ -3,9 +3,12 @@ require("dotenv").config();
 
 const Sib = require("sib-api-v3-sdk");
 
-console.log(process.env.API_KEY);;
+const { v4: uuidv4 } = require("uuid");
 
+
+const path = require("path");
 const User = require("../models/user");
+const Forget = require("../models/forget");
 const bcrypt = require("bcrypt");
 
 const jwtToken = require("../utils/generateToken");
@@ -100,59 +103,82 @@ exports.signinPost = async (req, res, next) => {
   }
 };
 
+exports.getResetPassword = async (req, res, next) => {
+  try {
+    const filePath = path.join(__dirname, "../../frontend/resetPassword.html");
+    res.sendFile(filePath);
+  } catch (error) {
+    return res.status(500).json({
+      responseMessage: "Something Went Wrong",
+    });
+  }
+};
+
+exports.postResetPassword = async (req, res, next) => {
+  try {
+
+    const uuid = req.params.uuid;
+  
+    const user = await Forget.findOne({
+      where: {
+        id: uuid,
+      },
+    });
+    if (user) {
+      if (user.isActive === true) {
+        const newPassword = req.body.newPassword;
+        bcrypt.hash(newPassword, 5, async(err,hash)=>{
+          if(err){
+            res.status(500).json({
+              responseMessage: "password didn't hash"
+            })
+          }else{
+            await User.update({ password: hash }, { where: { id: user.userId } })
+            await Forget.update({ isActive: false }, { where: { id: uuid } })
+            res.status(200).status({
+              responseMessage:"password has changed successfully"
+            })
+          }
+        })
+      } else {
+        return res.status(400).json({
+          responseMessage: "Reset record is not active (already used)",
+        });
+      }
+    } else {
+      return res.status(404).json({
+        responseMessage: "Reset record not found",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      responseMessage: "Something Went Wrong",
+    });
+  }
+};
+
 exports.forgetPassword = async (req, res, next) => {
   try {
     console.log("dskjn");
-    const email = req.body.email;
     const forgetEmail = await User.findOne({
       where: { email: req.body.email },
     });
     if (forgetEmail) {
-      const client = Sib.ApiClient.instance;
-      const apiKey = client.authentications["api-key"];
-      apiKey.apiKey = process.env.API_KEY;
-      let transporter = new Sib.TransactionalEmailsApi();
+      const uuid = uuidv4();
+      const url = `http://127.0.0.1:5500/frontend/resetPassword.html?uuid=${uuid}`;
+      const resetData = await Forget.create({
+        id: uuid,
+        userId: forgetEmail.id,
+        isActive: true,
+      });
 
-      const sender = {
-        email: "rohitku841301@gmail.com",
-        name: "S***der",
-      };
-      const receivers = [
-        {
-          email: req.body.email,
-        },
-      ];
-
-      try {
-        let info = await transporter.sendTransacEmail({
-          sender: sender,
-          to: receivers,
-          subject: "Reset password OTP",
-          textContent: `Dear, Your OTP is: `,
-        });
-        console.log("result", info);
-
-        return res.status(200).json({
-          responseMessage: "email sent successfully",
-        });
-      } catch (error) {
-        console.log("Error sending email:", error);
-
-        if (
-          error.response &&
-          error.response.body &&
-          error.response.body.code === "unauthorized"
-        ) {
-          return res.status(401).json({
-            responseMessage: "Unauthorized access to Sendinblue API",
-          });
-        }
-
-        return res.status(500).json({
-          responseMessage: "Error sending email",
+      if (resetData) {
+        console.log(url);
+        res.status(201).json({
+          responseMessage: "Check your email",
+          url: url,
         });
       }
-      // console.log(info);
     } else {
       return res.status(404).json({
         responseMessage: "Email not found",
@@ -164,3 +190,51 @@ exports.forgetPassword = async (req, res, next) => {
     });
   }
 };
+
+// Sending email code
+
+// const client = Sib.ApiClient.instance;
+// const apiKey = client.authentications["api-key"];
+// apiKey.apiKey = process.env.API_KEY;
+// let transporter = new Sib.TransactionalEmailsApi();
+
+// const sender = {
+//   email: "rohitku841301@gmail.com",
+//   name: "S***der",
+// };
+// const receivers = [
+//   {
+//     email: req.body.email,
+//   },
+// ];
+
+// try {
+//   let info = await transporter.sendTransacEmail({
+//     sender: sender,
+//     to: receivers,
+//     subject: "Reset password OTP",
+//     textContent: `Dear, Your OTP is: `,
+
+//   });
+//   console.log("result", info);
+
+//   return res.status(200).json({
+//     responseMessage: "email sent successfully",
+//   });
+// } catch (error) {
+//   console.log("Error sending email:", error);
+
+//   if (
+//     error.response &&
+//     error.response.body &&
+//     error.response.body.code === "unauthorized"
+//   ) {
+//     return res.status(401).json({
+//       responseMessage: "Unauthorized access to Sendinblue API",
+//     });
+//   }
+
+//   return res.status(500).json({
+//     responseMessage: "Error sending email",
+//   });
+// }

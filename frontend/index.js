@@ -1,4 +1,6 @@
 let formChecker = true;
+let resetPasswordURL = null;
+
 async function signupHandler(event) {
   try {
     formChecker = true;
@@ -152,11 +154,64 @@ async function forgetPasswordHandler(event) {
       }
     );
     console.log(forgetEmailData);
+    if (forgetEmailData.status === 201) {
+      console.log("all okay");
+      resetPasswordURL = forgetEmailData.data.url;
+      document.getElementById("successMessage").innerHTML =
+        forgetEmailData.data.responseMessage;
+      document.getElementById("successAlert").style.display = "block";
+    }
   } catch (error) {
-    if(error.response.status === 404){
+    if (error.response.status === 404) {
+      document.getElementById("warningMessage").innerHTML =
+        error.response.data.responseMessage;
+      document.getElementById("warning").style.display = "block";
       console.log(error.response.data.responseMessage);
-    }else{
+    } else if (error.response.status === 500) {
+      console.log(error.response.data.responseMessage);
+    } else {
+      console.log(error);
+    }
     console.log(error);
+  }
+}
+
+function getUUIDFromUrl() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get("uuid");
+}
+
+async function resetPasswordHandler(event) {
+  try {
+    event.preventDefault();
+    resetData = {
+      newPassword: event.target.newPassword.value,
+    };
+
+    const uuid = getUUIDFromUrl();
+
+    const responseData = await axios.post(
+      `http://localhost:3000/user/password/reset-password/${uuid}`,
+      JSON.stringify(resetData),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if(responseData.status===200){
+
+    }
+  } catch (error) {
+    console.log(error);
+    if(error.response.status === 400){
+
+    }else if(error.response.status === 404){
+
+    }else if(error.response.status === 500){
+
+    }else{
+      console.log(error);
     }
   }
 }
