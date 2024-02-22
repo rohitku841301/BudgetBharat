@@ -1,6 +1,11 @@
+require("dotenv").config();
+
 const sequelize = require("../database/db");
 const Expense = require("../models/expense");
 const User = require("../models/user");
+const fs = require("fs");
+const path = require("path");
+const AWS = require("aws-sdk");
 
 exports.addExpense = async (req, res, next) => {
   console.log(req.existingUser);
@@ -90,10 +95,10 @@ exports.deleteExpense = async (req, res, next) => {
     const id = req.params.id;
     const deletedExpenseData = await Expense.destroy({
       where: { id: id },
-      transaction: t
+      transaction: t,
     });
     console.log("dnsj", deletedExpenseData);
-    
+
     const totalAmount = await Expense.sum("amount", {
       where: { userId: req.existingUser.id },
       transaction: t,
@@ -159,6 +164,58 @@ exports.showLeaderboard = async (req, res, next) => {
   } catch (error) {
     res.status(500).json({
       responseMessage: "Internal Server Error",
+    });
+  }
+};
+
+async function uploadToS3(filename, data) {
+  try {
+    console.log("skdjn");
+    const BUCKET_NAME = "budgetbharat";
+    const ACCESS_KEY = process.env.ACCESS_KEY;
+    const SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY;
+
+    const s3bucket = new AWS.S3({
+      accessKeyId: ACCESS_KEY,
+      secretAccessKey: SECRET_ACCESS_KEY,
+    });
+
+    var params = {
+      Bucket: BUCKET_NAME,
+      Key: filename,
+      Body: data,
+      ACL: "public-read",
+    };
+
+    const s3response = await s3bucket.upload(params).promise();
+
+    console.log(s3response.Location);
+    return s3response.Location;
+  } catch (error) {
+    console.log("sdkjns");
+    throw error; 
+  }
+}
+
+exports.downloadFile = async (req, res, next) => {
+  try {
+    const expenseData = await Expense.findAll({
+      where: { userId: req.existingUser.id },
+    });
+
+    const data = JSON.stringify(expenseData);
+    const filename = `expenseUser${req.existingUser.id}/${new Date()}.txt`;
+    const fileURL = await uploadToS3(filename, data);
+
+    console.log(fileURL);
+    return res.status(200).json({
+      responseMessage: "true",
+      fileURL: fileURL,
+    });
+  } catch (error) {
+    console.log("sdkj");
+    return res.status(500).json({
+      responseMessage: "Something Went Wrong",
     });
   }
 };

@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 exports.authentication = async(req,res,next)=>{
+    console.log("sdkjn");
     const token = req.headers.authorization;
     console.log(token);
     jwt.verify(token, "qwerty", (err,decode)=>{

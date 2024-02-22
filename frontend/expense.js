@@ -77,8 +77,15 @@ function parseJwt(token) {
 async function showLeaderboard(event) {
   try {
     event.preventDefault();
+    const token = localStorage.getItem("token");
     const responseData = await axios.get(
-      "http://localhost:3000/expense/premium/leaderboard"
+      "http://localhost:3000/expense/premium/leaderboard",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      }
     );
     if (responseData.status === 200) {
       const div = document.createElement("div");
@@ -179,9 +186,34 @@ async function showLeaderboard(event) {
         </div>
         
       </div>
-    </div>`
+    </div>`;
     }
 
+    console.log(responseData);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function downloadFile(event) {
+  try {
+    console.log("sdj");
+    event.preventDefault();
+
+    const token = localStorage.getItem("token");
+    console.log(token);
+    const responseData = await axios.get(
+      "http://localhost:3000/user/downloadFile",
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    if (responseData.status === 200) {
+      fileURL = responseData.data.fileURL;
+      window.location.href = fileURL;
+    }
     console.log(responseData);
   } catch (error) {
     console.log(error);
@@ -197,8 +229,14 @@ async function premiumUserFunctionality(token) {
     leaderboard.innerText = "Leaderboard";
     leaderboard.classList.add("leaderboard");
     leaderboard.setAttribute("onclick", "showLeaderboard(event)");
-    const form = document.querySelector("form");
-    form.after(leaderboard);
+
+    const downloadFile = document.createElement("button");
+    downloadFile.innerText = "Download";
+    downloadFile.classList.add("download");
+    downloadFile.setAttribute("onclick", "downloadFile(event)");
+    const premiumButton = document.querySelector(".premiumButton");
+    premiumButton.append(leaderboard);
+    premiumButton.append(downloadFile);
   }
 }
 

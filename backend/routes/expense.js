@@ -9,6 +9,6 @@ router.post('/add-Expense', middlewear.authentication, expenseController.addExpe
 router.get("/get-Expense", middlewear.authentication, expenseController.getExpense)
 router.delete("/delete-Expense/:id", middlewear.authentication, expenseController.deleteExpense)
 
-router.get('/premium/leaderboard', expenseController.showLeaderboard);
+router.get('/premium/leaderboard', middlewear.authentication, expenseController.showLeaderboard);
 
 module.exports = router;

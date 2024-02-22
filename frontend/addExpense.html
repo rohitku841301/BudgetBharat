@@ -38,10 +38,16 @@
               <a class="nav-link active" href="addExpense.html">Add Expense</a>
             </li>
             <li class="nav-item" id="disappear">
-              <a class="nav-link active" href=""><button type="click" id="buyPremiumHandler">Buy Premium</button></a>
+              <a class="nav-link active" href=""
+                ><button type="click" id="buyPremiumHandler">
+                  Buy Premium
+                </button></a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="addExpense.html"><button type="click" id="logout">Logout</button></a>
+              <a class="nav-link active" href="addExpense.html"
+                ><button type="click" id="logout">Logout</button></a
+              >
             </li>
           </ul>
         </div>
@@ -57,17 +63,16 @@
       <input type="text" id="description" name="description" />
       <label for="category">Category</label>
       <select name="category" id="category">
-      <option value="food">Food</option>
-      <option value="petrol">Petrol</option>
-      <option value="salary">Salary</option>
-      <option value="other">Other</option>
-    </select>
+        <option value="food">Food</option>
+        <option value="petrol">Petrol</option>
+        <option value="salary">Salary</option>
+        <option value="other">Other</option>
+      </select>
       <button type="submit">Add Expense</button>
     </form>
 
     <div class="container"></div>
-
-   
+    <div class="premiumButton"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="expense.js"></script>
