@@ -240,34 +240,92 @@ async function premiumUserFunctionality(token) {
   }
 }
 
+async function fetchDataAndDisplay(token, pageNumber) {
+  try {
+    const response = await axios.get(`http://localhost:3000/expense/get-Expense/${pageNumber}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    console.log(response);
+    displayPaginationButtons(response.data.pageDetail, token);
+    displayUserDetails(response.data.responseData);
+  } catch (error) {
+    console.error("An error occurred:", error);
+    handleErrorResponse(error);
+  }
+}
+
+function displayPaginationButtons(page, token) {
+  const previousPage = document.getElementById("previousPage")
+  const currentPage = document.getElementById("currentPage")
+  const nextPage = document.getElementById("nextPage")
+  
+  if(page.previousPageShow){
+    previousPage.addEventListener("click", async()=>{
+      await fetchDataAndDisplay(token, page.previousPage)
+      const expenseTable = document.getElementById("expenseTable");
+      expenseTable.remove();
+    },{ once: true })
+    previousPage.innerText = page.previousPage;
+    previousPage.style.display = "flex"
+  
+  }else{
+    previousPage.style.display = "none"
+  }
+  currentPage.innerText = page.currentPage;
+  if(page.nextPageShow){
+    nextPage.addEventListener("click", async()=>{
+      await fetchDataAndDisplay(token, page.nextPage);
+      const expenseTable = document.getElementById("expenseTable");
+      expenseTable.remove();
+    },{ once: true })
+    nextPage.innerText = page.nextPage;
+    nextPage.style.display = "flex"
+  }else{
+    nextPage.style.display = "none"
+  }
+   
+}
+
+function displayUserDetails(expenseDetails) {
+  // const expenseTable = document.getElementById("expenseTable");
+  const expenseTable = document.createElement("tbody");
+  expenseTable.setAttribute("id", "expenseTable")
+  expenseDetails.map((expense)=>{
+  const tr = document.createElement("tr");
+    const td1 = document.createElement("td");
+    td1.innerText = expense.id
+    const td2 = document.createElement("td");
+    td2.innerText = expense.amount
+    const td3 = document.createElement("td");
+    td3.innerText = expense.category
+    const td4 = document.createElement("td");
+    td4.innerText = expense.description
+    tr.append(td1)
+    tr.append(td2)
+    tr.append(td3)
+    tr.append(td4)
+  expenseTable.append(tr);
+  })
+  const table = document.getElementById("table");
+  table.append(expenseTable)
+}
+
+function handleErrorResponse(error) {
+  // Your logic to handle error response
+}
+
 window.addEventListener("DOMContentLoaded", async () => {
   try {
+    let pageNumber = 2;
     const token = localStorage.getItem("token");
 
-    premiumUserFunctionality(token);
-
-    const allExpenseDetails = await axios.get(
-      "http://localhost:3000/expense/get-Expense",
-      {
-        headers: {
-          Authorization: token,
-        },
-      }
-    );
-    console.log(allExpenseDetails);
-    // if()
-    // document.getElementById("buyPremiumHandler").innerHTML = "Premium User⭐"
-
-    const newObj = allExpenseDetails.data.responseData;
-    for (let i = 0; i < newObj.length; i++) {
-      showUser(newObj[i]);
-    }
+    await premiumUserFunctionality(token);
+    await fetchDataAndDisplay(token, pageNumber);
   } catch (error) {
-    console.log(error);
-
-    if (error.response.status === 401) {
-      window.location.href = "signIn.html";
-    }
+    console.error(error);
+    handleErrorResponse(error);
   }
 });
 

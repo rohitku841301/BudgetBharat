@@ -16,6 +16,18 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+      .pageButton{
+        display: flex;
+      }
+      .paginationButtons{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+
   </head>
   <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -71,7 +83,31 @@
       <button type="submit">Add Expense</button>
     </form>
 
+
+    <table class="table" id="table">
+      <thead>
+        <tr>
+          <!-- <th scope="col">#</th> -->
+          <th scope="col">ExpenseId</th>
+          <th scope="col">Amount</th>
+          <th scope="col">Category</th>
+          <th scope="col">Description</th>
+        </tr>
+      </thead>
+      <!-- <tbody id="expenseTable">
+      
+      </tbody> -->
+    </table>
+
+    <div class="paginationButtons">
+    <button type="button" class="btn btn-success" id="previousPage"></button>
+    <button type="button" class="btn btn-danger" id="currentPage"></button>
+    <button type="button" class="btn btn-success" id="nextPage"></button>
+  </div>
+
+
     <div class="container"></div>
+   
     <div class="premiumButton"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

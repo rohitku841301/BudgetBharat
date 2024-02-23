@@ -3,12 +3,13 @@ require("dotenv").config();
 const sequelize = require("../database/db");
 const Expense = require("../models/expense");
 const User = require("../models/user");
+const File = require("../models/file");
 const fs = require("fs");
 const path = require("path");
 const AWS = require("aws-sdk");
 
 exports.addExpense = async (req, res, next) => {
-  console.log(req.existingUser);
+  // console.log(req.existingUser);
   let t;
   try {
     t = await sequelize.transaction();
@@ -20,7 +21,7 @@ exports.addExpense = async (req, res, next) => {
       },
       { transaction: t }
     );
-    console.log("skjbj");
+    // console.log("skjbj");
     const totalAmount = await Expense.sum("amount", {
       where: { userId: req.existingUser.id },
       transaction: t,
@@ -60,30 +61,43 @@ exports.addExpense = async (req, res, next) => {
 
 exports.getExpense = async (req, res, next) => {
   try {
-    const expenseData = await Expense.findAll({
+    const limit = 3;
+    const currentPage = parseInt(req.params.currentPage);
+
+    const count = await Expense.count({
       where: { userId: req.existingUser.id },
     });
-    if (expenseData) {
-      const allExpenseData = expenseData.map((expenseData) => ({
-        id: expenseData.id,
-        amount: expenseData.amount,
-        description: expenseData.description,
-        category: expenseData.category,
-      }));
-      return res.status(200).json({
-        responseMessage: "Get All Data",
-        responseData: allExpenseData,
-      });
-    } else {
-      return res.status(500).json({
-        responseMessage: "Something Went Wrong",
-        error: error,
-      });
-    }
+    const totalPages = Math.ceil(count / limit);
+
+    const offset = limit * (currentPage - 1);
+    const expenses = await Expense.findAll({
+      where: { userId: req.existingUser.id },
+      limit: limit,
+      offset: offset,
+    });
+
+    const pageDetail = {
+      currentPage: currentPage,
+      totalPages: totalPages,
+      previousPage: currentPage - 1,
+      nextPage: currentPage + 1,
+      previousPageShow: currentPage > 1,
+      nextPageShow: currentPage < totalPages,
+    };
+
+    return res.status(200).json({
+      success: true,
+      message: "Get All Data",
+
+      responseData: expenses,
+      pageDetail: pageDetail,
+    });
   } catch (error) {
+    console.error("An error occurred:", error);
     return res.status(500).json({
-      responseMessage: "Something Went Wrong",
-      error: error,
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
     });
   }
 };
@@ -150,7 +164,7 @@ exports.showLeaderboard = async (req, res, next) => {
     //   group: ["User.id"],
     //   having: sequelize.literal("`total_amount` > 0"),
     // });
-    console.log(result);
+    // console.log(result);
     if (result) {
       res.status(200).json({
         responseMessage: "get all data",
@@ -192,8 +206,9 @@ async function uploadToS3(filename, data) {
     console.log(s3response.Location);
     return s3response.Location;
   } catch (error) {
-    console.log("sdkjns");
-    throw error; 
+    return res.status(500).json({
+      responseMessage: "Something Went Wrong",
+    });
   }
 }
 
@@ -206,7 +221,10 @@ exports.downloadFile = async (req, res, next) => {
     const data = JSON.stringify(expenseData);
     const filename = `expenseUser${req.existingUser.id}/${new Date()}.txt`;
     const fileURL = await uploadToS3(filename, data);
-
+    await File.create({
+      fileURL: fileURL,
+      userId: req.existingUser.id,
+    });
     console.log(fileURL);
     return res.status(200).json({
       responseMessage: "true",
@@ -216,6 +234,42 @@ exports.downloadFile = async (req, res, next) => {
     console.log("sdkj");
     return res.status(500).json({
       responseMessage: "Something Went Wrong",
+    });
+  }
+};
+
+exports.pagination = async (req, res, next) => {
+  try {
+    const count = await Expense.findAll({
+      attributes: [
+        [sequelize.fn("COUNT", sequelize.col("userId")), "userCount"],
+      ],
+      where: { userId: req.existingUser.id },
+    });
+    const listCount = count[0].dataValues.userCount;
+    const currentPage = 1;
+    const limit = 3;
+
+    const list = await Expense.findAll({
+      where: { userId: req.existingUser.id },
+      limit: limit,
+      offset: limit * (currentPage - 1),
+    });
+    const pageDetail = {
+      currentPage: page,
+      nextPage: page + 1,
+      previousPage: page - 1,
+    };
+    if (list) {
+      res.status(200).json({
+        responseMessage: "success",
+        list: list,
+        pageDetail: pageDetail,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      responseMessage: "Internal Server Error",
     });
   }
 };
