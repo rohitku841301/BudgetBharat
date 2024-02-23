@@ -242,7 +242,8 @@ async function premiumUserFunctionality(token) {
 
 async function fetchDataAndDisplay(token, pageNumber) {
   try {
-    const response = await axios.get(`http://localhost:3000/expense/get-Expense/${pageNumber}`, {
+    const rows = localStorage.getItem("rows");
+    const response = await axios.get(`http://localhost:3000/expense/get-Expense/${pageNumber}?rows=${rows}`, {
       headers: {
         Authorization: token,
       },
@@ -262,7 +263,9 @@ function displayPaginationButtons(page, token) {
   const nextPage = document.getElementById("nextPage")
   
   if(page.previousPageShow){
+    console.log("p");
     previousPage.addEventListener("click", async()=>{
+      console.log("previus");
       await fetchDataAndDisplay(token, page.previousPage)
       const expenseTable = document.getElementById("expenseTable");
       expenseTable.remove();
@@ -275,7 +278,9 @@ function displayPaginationButtons(page, token) {
   }
   currentPage.innerText = page.currentPage;
   if(page.nextPageShow){
+    console.log("a");
     nextPage.addEventListener("click", async()=>{
+      console.log("after");
       await fetchDataAndDisplay(token, page.nextPage);
       const expenseTable = document.getElementById("expenseTable");
       expenseTable.remove();
@@ -318,7 +323,8 @@ function handleErrorResponse(error) {
 
 window.addEventListener("DOMContentLoaded", async () => {
   try {
-    let pageNumber = 2;
+    
+    let pageNumber = 1;
     const token = localStorage.getItem("token");
 
     await premiumUserFunctionality(token);
@@ -360,3 +366,8 @@ function showUser(newObj) {
   }
   form.querySelector("select").value = "0";
 }
+
+document.getElementById("numberOfExpenses").addEventListener("change", (event)=>{
+    console.log(event.target.value);
+    localStorage.setItem("rows", event.target.value)
+})
