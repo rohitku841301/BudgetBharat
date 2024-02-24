@@ -1,6 +1,8 @@
 const form = document.querySelector("form");
 
 let expenseId = null;
+let pageNumber = 1;
+
 
 async function addExpenseFormHandler(event) {
   try {
@@ -318,20 +320,19 @@ function displayUserDetails(expenseDetails) {
 }
 
 function handleErrorResponse(error) {
-  // Your logic to handle error response
+  
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
   try {
     
-    let pageNumber = 1;
     const token = localStorage.getItem("token");
 
     await premiumUserFunctionality(token);
     await fetchDataAndDisplay(token, pageNumber);
   } catch (error) {
     console.error(error);
-    handleErrorResponse(error);
+    window.location.href = "frontend/signIn.html"
   }
 });
 
@@ -367,7 +368,12 @@ function showUser(newObj) {
   form.querySelector("select").value = "0";
 }
 
-document.getElementById("numberOfExpenses").addEventListener("change", (event)=>{
+document.getElementById("numberOfExpenses").addEventListener("change", async (event)=>{
     console.log(event.target.value);
-    localStorage.setItem("rows", event.target.value)
+    localStorage.setItem("rows", event.target.value);
+    const token = localStorage.getItem("token");
+    const expenseTable = document.getElementById("expenseTable");
+      expenseTable.remove();
+    await fetchDataAndDisplay(token,pageNumber);
+
 })

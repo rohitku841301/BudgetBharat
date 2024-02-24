@@ -63,7 +63,7 @@ exports.getExpense = async (req, res, next) => {
   try {
     console.log(req.query.rows);
     const rows = req.query.rows;
-    const limit = 3;
+    const limit = parseInt(rows);
     const currentPage = parseInt(req.params.currentPage);
 console.log(limit, currentPage);
     const count = await Expense.count({
