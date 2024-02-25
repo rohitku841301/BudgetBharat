@@ -2,37 +2,12 @@ require("dotenv").config();
 
 const User = require("../models/user");
 const jwtToken = require("../utils/generateToken");
-
 const Order = require("../models/order");
-const Razorpay = require("razorpay");
+const razorPay = require("../services/razorpayService");
 
 exports.getPremium = async (req, res, next) => {
-  const instance = new Razorpay({
-    key_id: process.env.KEY_ID,
-    key_secret: process.env.KEY_SECRET,
-  });
-
-  const amount = 100;
-  const currency = "INR";
-  instance.orders.create({ amount, currency }, async (err, order) => {
-    if (err) {
-      res.status(500).json({
-        reponseMessage: "Something went wrong",
-      });
-    }
-    console.log("Razorpay Order:", order);
-    const orderData = await Order.create({
-      orderId: order.id,
-      status: "PENDING",
-      userId: req.user,
-    });
-    if (orderData) {
-      res.status(201).json({
-        orderId: order.id,
-        key_id: process.env.KEY_ID,
-      });
-    }
-  });
+  console.log("sdj", req.existingUser);
+  await razorPay.razorPayServices(req, res, next);
 };
 
 exports.updateTransaction = async (req, res, next) => {

@@ -10,6 +10,6 @@ router.get("/get-Expense/:currentPage", middlewear.authentication, expenseContro
 router.delete("/delete-Expense/:id", middlewear.authentication, expenseController.deleteExpense)
 
 router.get('/premium/leaderboard', middlewear.authentication, expenseController.showLeaderboard);
-router.get('/pagination', middlewear.authentication, expenseController.pagination);
+
 
 module.exports = router;

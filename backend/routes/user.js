@@ -12,7 +12,7 @@ router.post('/password/forget-password', userController.forgetPassword);
 router.get('/password/reset-password/:uuid', userController.getResetPassword);
 router.post('/password/reset-password/:uuid', userController.postResetPassword);
 
-// router.get('/downloadFile', middlewear.authentication, expenseController.downloadFile)
+router.get('/downloadFile', middlewear.authentication, expenseController.downloadFile)
 
 
 module.exports = router

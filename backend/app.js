@@ -1,7 +1,13 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mysql = require("mysql2");
+const helmet = require("helmet");
+const compression = require("compression");
+const morgan = require("morgan");
+const fs = require("fs");
+const path = require('path')
 
 const User = require("./models/user");
 const Expense = require("./models/expense");
@@ -12,8 +18,13 @@ const sequelize = require("./database/db");
 const Order = require("./models/order");
 
 const app = express();
-const PORT = 3000;
 
+
+// const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
+
+// app.use(morgan('combined'));
+app.use(compression());
+app.use(helmet());
 app.use(bodyParser.json());
 app.use(
   cors({
@@ -36,8 +47,8 @@ Order.belongsTo(User);
 sequelize
   .sync()
   .then((result) => {
-    app.listen(PORT, () => {
-      console.log(`server is running at port - http://localhost:${PORT}`);
+    app.listen(process.env.PORT, () => {
+      console.log(`server is running at port - http://localhost:${process.env.PORT}`);
     });
   })
   .catch((error) => {

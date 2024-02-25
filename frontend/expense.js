@@ -3,7 +3,6 @@ const form = document.querySelector("form");
 let expenseId = null;
 let pageNumber = 1;
 
-
 async function addExpenseFormHandler(event) {
   try {
     event.preventDefault();
@@ -223,118 +222,110 @@ async function downloadFile(event) {
 }
 
 async function premiumUserFunctionality(token) {
-  const payload = parseJwt(token);
-  if (payload.isPremium) {
-    document.getElementById("disappear").style.display = "none";
-    document.getElementById("premium").innerHTML = "premium user";
-    const leaderboard = document.createElement("button");
-    leaderboard.innerText = "Leaderboard";
-    leaderboard.classList.add("leaderboard");
-    leaderboard.setAttribute("onclick", "showLeaderboard(event)");
+  try {
+    const payload = parseJwt(token);
+    if (payload.isPremium) {
+      document.getElementById("disappear").style.display = "none";
+      document.getElementById("premium").innerHTML = "premium user";
+      const leaderboard = document.createElement("button");
+      leaderboard.innerText = "Leaderboard";
+      leaderboard.classList.add("leaderboard");
+      leaderboard.setAttribute("onclick", "showLeaderboard(event)");
 
-    const downloadFile = document.createElement("button");
-    downloadFile.innerText = "Download";
-    downloadFile.classList.add("download");
-    downloadFile.setAttribute("onclick", "downloadFile(event)");
-    const premiumButton = document.querySelector(".premiumButton");
-    premiumButton.append(leaderboard);
-    premiumButton.append(downloadFile);
+      const downloadFile = document.createElement("button");
+      downloadFile.innerText = "Download";
+      downloadFile.classList.add("download");
+      downloadFile.setAttribute("onclick", "downloadFile(event)");
+      const premiumButton = document.querySelector(".premiumButton");
+      premiumButton.append(leaderboard);
+      premiumButton.append(downloadFile);
+    }
+  } catch (error) {
+    console.log(error.message);
+    console.log("sdj");
   }
+}
+
+function displayUserDetails(expenseDetails) {
+  const expenseTable = document.createElement("tbody");
+  expenseTable.setAttribute("id", "expenseTable");
+  expenseDetails.map((expense) => {
+    const tr = document.createElement("tr");
+    const td1 = document.createElement("td");
+    td1.innerText = expense.id;
+    const td2 = document.createElement("td");
+    td2.innerText = expense.amount;
+    const td3 = document.createElement("td");
+    td3.innerText = expense.category;
+    const td4 = document.createElement("td");
+    td4.innerText = expense.description;
+    tr.append(td1);
+    tr.append(td2);
+    tr.append(td3);
+    tr.append(td4);
+    expenseTable.append(tr);
+  });
+  const table = document.getElementById("table");
+  table.append(expenseTable);
 }
 
 async function fetchDataAndDisplay(token, pageNumber) {
   try {
     const rows = localStorage.getItem("rows");
-    const response = await axios.get(`http://localhost:3000/expense/get-Expense/${pageNumber}?rows=${rows}`, {
-      headers: {
-        Authorization: token,
-      },
-    });
+    const response = await axios.get(
+      `http://localhost:3000/expense/get-Expense/${pageNumber}?rows=${rows}`,
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
     console.log(response);
-    displayPaginationButtons(response.data.pageDetail, token);
     displayUserDetails(response.data.responseData);
+
+    return response.data.pageDetail;
   } catch (error) {
-    console.error("An error occurred:", error);
-    handleErrorResponse(error);
+    if (error.response.status === 401) {
+      console.log("token verification failed");
+      window.location.href = "/frontend/signIn.html";
+    } else if (error.response.status === 404) {
+      console.log(error.response.data.responseMessage);
+    } else {
+      console.error("An error occurred:", error);
+    }
   }
-}
-
-function displayPaginationButtons(page, token) {
-  const previousPage = document.getElementById("previousPage")
-  const currentPage = document.getElementById("currentPage")
-  const nextPage = document.getElementById("nextPage")
-  
-  if(page.previousPageShow){
-    console.log("p");
-    previousPage.addEventListener("click", async()=>{
-      console.log("previus");
-      await fetchDataAndDisplay(token, page.previousPage)
-      const expenseTable = document.getElementById("expenseTable");
-      expenseTable.remove();
-    },{ once: true })
-    previousPage.innerText = page.previousPage;
-    previousPage.style.display = "flex"
-  
-  }else{
-    previousPage.style.display = "none"
-  }
-  currentPage.innerText = page.currentPage;
-  if(page.nextPageShow){
-    console.log("a");
-    nextPage.addEventListener("click", async()=>{
-      console.log("after");
-      await fetchDataAndDisplay(token, page.nextPage);
-      const expenseTable = document.getElementById("expenseTable");
-      expenseTable.remove();
-    },{ once: true })
-    nextPage.innerText = page.nextPage;
-    nextPage.style.display = "flex"
-  }else{
-    nextPage.style.display = "none"
-  }
-   
-}
-
-function displayUserDetails(expenseDetails) {
-  // const expenseTable = document.getElementById("expenseTable");
-  const expenseTable = document.createElement("tbody");
-  expenseTable.setAttribute("id", "expenseTable")
-  expenseDetails.map((expense)=>{
-  const tr = document.createElement("tr");
-    const td1 = document.createElement("td");
-    td1.innerText = expense.id
-    const td2 = document.createElement("td");
-    td2.innerText = expense.amount
-    const td3 = document.createElement("td");
-    td3.innerText = expense.category
-    const td4 = document.createElement("td");
-    td4.innerText = expense.description
-    tr.append(td1)
-    tr.append(td2)
-    tr.append(td3)
-    tr.append(td4)
-  expenseTable.append(tr);
-  })
-  const table = document.getElementById("table");
-  table.append(expenseTable)
-}
-
-function handleErrorResponse(error) {
-  
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
   try {
-    
     const token = localStorage.getItem("token");
-
     await premiumUserFunctionality(token);
-    await fetchDataAndDisplay(token, pageNumber);
+
+    const fetchData = await fetchDataAndDisplay(token, pageNumber);
+
+    for (let i = 1; i <= fetchData.totalPages; i++) {
+      const newPageBtn = document.createElement("button");
+      newPageBtn.innerText = i;
+      newPageBtn.setAttribute("onclick", "currentPageBtn(event)");
+      const paginationButtons = document.querySelector(".paginationButtons");
+      paginationButtons.append(newPageBtn);
+    }
   } catch (error) {
-    console.error(error);
-    window.location.href = "frontend/signIn.html"
+    console.log(error);
   }
 });
+
+async function currentPageBtn(event) {
+  try {
+    const token = localStorage.getItem("token");
+    const currentButtonClicked = event.target.innerText;
+    const expenseTable = document.getElementById("expenseTable");
+    expenseTable.remove();
+    await fetchDataAndDisplay(token, currentButtonClicked);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 function showUser(newObj) {
   const entries = Object.entries(newObj);
@@ -368,12 +359,13 @@ function showUser(newObj) {
   form.querySelector("select").value = "0";
 }
 
-document.getElementById("numberOfExpenses").addEventListener("change", async (event)=>{
+document
+  .getElementById("numberOfExpenses")
+  .addEventListener("change", async (event) => {
     console.log(event.target.value);
     localStorage.setItem("rows", event.target.value);
     const token = localStorage.getItem("token");
     const expenseTable = document.getElementById("expenseTable");
-      expenseTable.remove();
-    await fetchDataAndDisplay(token,pageNumber);
-
-})
+    expenseTable.remove();
+    await fetchDataAndDisplay(token, pageNumber);
+  });

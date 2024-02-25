@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
 
@@ -10,7 +11,7 @@ const generateToken = async (id, email, isPremium) => {
             email: email,
             isPremium: isPremium,
           },
-          "qwerty",
+          process.env.JWT_SIGNATURE,
           (err, token) => {
             if (err) {
               reject(err);
@@ -25,7 +26,7 @@ const generateToken = async (id, email, isPremium) => {
       return token;
     } catch (error) {
       console.error("Error generating token:", error);
-      throw error; // You might want to handle or log the error accordingly
+      throw error; 
     }
   };
 
