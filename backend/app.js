@@ -24,7 +24,9 @@ const app = express();
 
 // app.use(morgan('combined'));
 app.use(compression());
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false,
+}));
 app.use(bodyParser.json());
 app.use(
   cors({
@@ -32,10 +34,17 @@ app.use(
   })
 );
 
+const pathFile = path.join(__dirname, `../frontend`);
+console.log(pathFile);
 
 app.use("/user", userRoute);
 app.use("/expense", expenseRoute);
 app.use('/order', orderRoute);
+
+app.use((req,res,next)=>{
+  console.log("urll", req.url);
+  res.sendFile(path.join(__dirname, `../${req.url}`))
+})
 
 
 User.hasMany(Expense);
@@ -48,7 +57,7 @@ sequelize
   .sync()
   .then((result) => {
     app.listen(process.env.PORT, () => {
-      console.log(`server is running at port - http://localhost:${process.env.PORT}`);
+      console.log(`server is running at port - http://35.171.4.218:${process.env.PORT}`);
     });
   })
   .catch((error) => {

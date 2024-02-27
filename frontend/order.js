@@ -5,7 +5,7 @@ document
       event.preventDefault();
       const token = localStorage.getItem("token");
       const orderData = await axios.get(
-        "http://localhost:3000/order/buy-premium",
+        "http://35.171.4.218:3000/order/buy-premium",
         {
           headers: {
             Authorization: token,
@@ -19,7 +19,7 @@ document
           handler: async function (orderData) {
             try {
               const updatedStatus = await axios.post(
-                "http://localhost:3000/order/buy-premium/update-transaction",
+                "http://35.171.4.218:3000/order/buy-premium/update-transaction",
                 {
                   orderId: options.orderId,
                   payment_id: orderData.razorpay_payment_id,

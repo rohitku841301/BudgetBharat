@@ -14,7 +14,7 @@ async function signupHandler(event) {
     signupFormValidation(signupData);
     if (formChecker) {
       const responseData = await axios.post(
-        "http://localhost:3000/user/signup",
+        "http://35.171.4.218:3000/user/signup",
         JSON.stringify(signupData),
         {
           headers: {
@@ -53,7 +53,7 @@ async function signinHandler(event) {
     signinFormValidation(signinData);
     if (formChecker) {
       const responseData = await axios.post(
-        "http://localhost:3000/user/signin",
+        "http://35.171.4.218:3000/user/signin",
         JSON.stringify(signinData),
         {
           headers: {
@@ -145,7 +145,7 @@ async function forgetPasswordHandler(event) {
       email: event.target.forgetEmail.value,
     };
     const forgetEmailData = await axios.post(
-      "http://localhost:3000/user/password/forget-password",
+      "http://35.171.4.218:3000/user/password/forget-password",
       JSON.stringify(forgetEmail),
       {
         headers: {
@@ -191,7 +191,7 @@ async function resetPasswordHandler(event) {
     const uuid = getUUIDFromUrl();
 
     const responseData = await axios.post(
-      `http://localhost:3000/user/password/reset-password/${uuid}`,
+      `http://35.171.4.218:3000/user/password/reset-password/${uuid}`,
       JSON.stringify(resetData),
       {
         headers: {

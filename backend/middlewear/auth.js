@@ -2,6 +2,7 @@ require("dotenv").config();
 const jwt = require('jsonwebtoken');
 
 exports.authentication = async (req, res, next) => {
+    console.log("sdjbn");
     const tokenHeader = req.headers.authorization;
     
     jwt.verify(tokenHeader, process.env.JWT_SIGNATURE, (err, decode) => {

@@ -60,9 +60,10 @@ exports.addExpense = async (req, res, next) => {
 
 exports.getExpense = async (req, res, next) => {
   try {
+    
     const limit = parseInt(req.query.rows);
     const currentPage = parseInt(req.params.currentPage);
-
+    console.log("arrow--",limit, currentPage);
     const count = await Expense.count({
       where: { userId: req.existingUser.id },
     });

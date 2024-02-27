@@ -15,7 +15,7 @@ async function addExpenseFormHandler(event) {
     const token = localStorage.getItem("token");
 
     const responseData = await axios.post(
-      "http://localhost:3000/expense/add-Expense",
+      "http://35.171.4.218:3000/expense/add-Expense",
       JSON.stringify(expenseData),
       {
         headers: {
@@ -42,7 +42,7 @@ async function deleteUserDetail(event) {
     console.log(expenseId);
     const token = localStorage.getItem("token");
     const deletedExpense = await axios.delete(
-      `http://localhost:3000/expense/delete-Expense/${expenseId}`,
+      `http://35.171.4.218:3000/expense/delete-Expense/${expenseId}`,
       {
         headers: {
           Authorization: token,
@@ -80,7 +80,7 @@ async function showLeaderboard(event) {
     event.preventDefault();
     const token = localStorage.getItem("token");
     const responseData = await axios.get(
-      "http://localhost:3000/expense/premium/leaderboard",
+      "http://35.171.4.218:3000/expense/premium/leaderboard",
       {
         headers: {
           "Content-Type": "application/json",
@@ -204,7 +204,7 @@ async function downloadFile(event) {
     const token = localStorage.getItem("token");
     console.log(token);
     const responseData = await axios.get(
-      "http://localhost:3000/user/downloadFile",
+      "http://35.171.4.218:3000/user/downloadFile",
       {
         headers: {
           Authorization: token,
@@ -271,9 +271,12 @@ function displayUserDetails(expenseDetails) {
 
 async function fetchDataAndDisplay(token, pageNumber) {
   try {
-    const rows = localStorage.getItem("rows");
+    let rows = localStorage.getItem("rows");
+    if(rows===null){
+      rows = 3;
+    }
     const response = await axios.get(
-      `http://localhost:3000/expense/get-Expense/${pageNumber}?rows=${rows}`,
+      `http://35.171.4.218:3000/expense/get-Expense/${pageNumber}?rows=${rows}`,
       {
         headers: {
           Authorization: token,
