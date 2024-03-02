@@ -18,16 +18,165 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <style>
-      .pageButton{
+      .signup-container {
+        background-color: #000814;
+        /* height: 92vh; */
+      }
+      .pageButton {
         display: flex;
       }
-      .paginationButtons{
+      .paginationButtons {
         display: flex;
         justify-content: center;
         align-items: center;
       }
-    </style>
 
+      .col-sm-10 {
+        color: white;
+        /* margin: 10px; */
+      }
+
+      .numberOfExpenses {
+        color: white;
+        margin: 10px;
+      }
+
+      .signup-heading {
+        color: white;
+      }
+      .signup-heading h2 {
+        font-family: Georgia, "Times New Roman", Times, serif;
+        /* font-size: 40px; */
+      }
+      .signup-heading p {
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+          sans-serif;
+        font-size: 14px;
+      }
+      .col img {
+        max-width: 100%;
+        height: auto;
+        display: block; /* Remove any default inline styling */
+        margin: auto; /* Center the image */
+      }
+
+      .signup-btn {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+
+      .signup-btn button {
+        padding: 10px 20px;
+        width: 100%;
+        border-radius: 15px;
+        background-color: #000814;
+        outline: none;
+        border: 1px solid white;
+        color: white;
+      }
+      .signup-btn button:hover {
+        background-color: #1787ef;
+        color: black;
+      }
+
+      .cont {
+        width: 80%;
+        margin: 10% auto;
+      }
+
+      .formbox {
+        width: 100%; /* Adjust the width as needed */
+        max-width: 400px; /* Optional: Set a maximum width for the form */
+        margin-top: 60px;
+      }
+
+      .formbox input {
+        border: 1px solid #fff; /* Set border color to white */
+        color: #fff; /* Set text color to white */
+        background-color: #000814;
+      }
+
+      .formbox input::placeholder {
+        color: #fff; /* Set placeholder text color to white */
+      }
+
+      .deleteTableBtn {
+        width: 100%;
+      }
+
+      .premium{
+        color: white;
+      padding: 40px 0px;
+      }
+
+      .leaderboaredContainer{
+        display: none;
+        
+      }
+
+      @media (min-width: 1400px) {
+        .container,
+        .container-lg,
+        .container-md,
+        .container-sm,
+        .container-xl,
+        .container-xxl {
+          max-width: 100%;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        .container,
+        .container-lg,
+        .container-md,
+        .container-sm,
+        .container-xl {
+          max-width: 100%;
+        }
+      }
+
+      @media (min-width: 992px) {
+        .container,
+        .container-lg,
+        .container-md,
+        .container-sm {
+          max-width: 100%;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .container,
+        .container-md,
+        .container-sm {
+          max-width: 100%;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .container,
+        .container-sm {
+          max-width: 100%;
+        }
+        .grid-right {
+          display: none;
+        }
+        .formbox {
+          margin-top: 38px;
+        }
+
+        #table th {
+          word-break: break-all;
+        }
+      }
+
+      @media (min-width: 576px) {
+        .container,
+        .container-sm {
+          max-width: 100%;
+        }
+      }
+    </style>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -68,52 +217,125 @@
 
     <h4 id="premium"></h4>
 
-    <form onsubmit="addExpenseFormHandler(event)">
-      <label for="amout">Amount</label>
-      <input type="number" id="amount" name="amount" />
-      <label for="description">Description</label>
-      <input type="text" id="description" name="description" />
-      <label for="category">Category</label>
-      <select name="category" id="category">
-        <option value="food">Food</option>
-        <option value="petrol">Petrol</option>
-        <option value="salary">Salary</option>
-        <option value="other">Other</option>
-      </select>
-      <button type="submit">Add Expense</button>
-    </form>
+    <div class="signup-container">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <div class="cont">
+              <div class="signup-heading">
+                <h2 class="display-6">Add Expense</h2>
+                <!-- <p>
+                  Empower your financial journey – Track every expense, create
+                  an account, and seize control of your financial well-being
+                </p> -->
+              </div>
 
-    <label for="numberOfExpenses">Rows Per Page</label>
-    <select name="numberOfExpenses" id="numberOfExpenses">
-      <option value="select">Select</option>
-      <option value="3">3</option>
-      <option value="5">5</option>
-      <option value="7">7</option>
-    </select>
+              <form onsubmit="addExpenseFormHandler(event)" class="formbox">
+                <div class="row mt-4 input-width">
+                  <label class="col-sm-10" for="colFormLabelLg1"></label>
+                  <input
+                    type="number"
+                    name="amount"
+                    class="form-control"
+                    id="colFormLabelLg1"
+                    placeholder="Amount"
+                  />
+                  <!-- <div class="error"><p id="error1"></p></div> -->
+                </div>
 
-    <table class="table" id="table">
-      <thead>
-        <tr>
-          <!-- <th scope="col">#</th> -->
-          <th scope="col">ExpenseId</th>
-          <th scope="col">Amount</th>
-          <th scope="col">Category</th>
-          <th scope="col">Description</th>
-        </tr>
-      </thead>
-      <!-- <tbody id="expenseTable">
-      
-      </tbody> -->
-    </table>
+                <div class="row mt-4 input-width">
+                  <label class="col-sm-10" for="colFormLabelLg2"></label>
+                  <input
+                    type="text"
+                    name="description"
+                    class="form-control"
+                    id="colFormLabelLg2"
+                    placeholder="Description"
+                  />
+                  <!-- <div class="error"><p id="error2"></p></div> -->
+                </div>
 
-    <div class="paginationButtons">
-    
-  </div>
+                <div class="row mt-4 input-width">
+                  <label class="col-sm-10" for="colFormLabelLg3"></label>
+                  <select
+                    name="category"
+                    id="category"
+                    class="form-select"
+                    aria-placeholder="Category"
+                  >
+                    <option selected>category</option>
+                    <option value="food">Food</option>
+                    <option value="petrol">Petrol</option>
+                    <option value="salary">Salary</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <!-- <div class="error"><p id="error3"></p></div> -->
+                </div>
 
+                <div class="signup-btn mt-4">
+                  <button type="submit" class="">Add Expense</button>
+                </div>
+              </form>
+            </div>
 
-    <div class="container"></div>
-   
-    <div class="premiumButton"></div>
+            <!-- <form onsubmit="addExpenseFormHandler(event)">
+              <label for="amout">Amount</label>
+              <input type="number" id="amount" name="amount" />
+              <label for="description">Description</label>
+              <input type="text" id="description" name="description" />
+              <label for="category">Category</label>
+              <select name="category" id="category">
+                <option value="food">Food</option>
+                <option value="petrol">Petrol</option>
+                <option value="salary">Salary</option>
+                <option value="other">Other</option>
+              </select>
+              <button type="submit">Add Expense</button>
+            </form> -->
+          </div>
+          <div class="col grid-right">
+            <img class="mt-4" src="addExpenseImage.svg" alt="addExpense" />
+          </div>
+        </div>
+      </div>
+
+      <div class="container mt-4">
+        <div class="row">
+          <div class="col">
+            <div class="numberOfExpenses">
+              <label for="numberOfExpenses">Rows Per Page</label>
+              <select name="numberOfExpenses" id="numberOfExpenses">
+                <option value="select">Select</option>
+                <option value="3">3</option>
+                <option value="5">5</option>
+                <option value="7">7</option>
+              </select>
+            </div>
+            <table class="table table-dark table-striped" id="table">
+              <thead>
+                <tr>
+                  <th scope="col" class="w-auto">ExpenseId</th>
+                  <th scope="col" class="w-auto">Amount</th>
+                  <th scope="col" class="w-auto">Category</th>
+                  <th scope="col" class="w-auto">Description</th>
+                  <th scope="col" class="w-auto">Action</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="paginationButtons"></div>
+
+      <div class="container"></div>
+
+      <div class="container premium" id="allPremiumFeature">
+        
+      </div>
+
+      <div class="premiumButton"></div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="expense.js"></script>

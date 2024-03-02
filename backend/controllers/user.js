@@ -15,6 +15,7 @@ const jwtToken = require("../utils/generateToken");
 
 exports.signupPost = async (req, res, next) => {
   try {
+    console.log("arrow");
     const userExist = await User.findOne({ where: { email: req.body.email } });
     console.log(userExist);
     if (userExist) {

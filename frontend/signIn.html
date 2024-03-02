@@ -22,10 +22,16 @@
         height: 92vh;
       }
       .signup-heading {
-        display: flex;
-        justify-content: left;
-        color: #ffd60a;
+        color: white;
+      }
+      .signup-heading h2 {
         font-family: Georgia, "Times New Roman", Times, serif;
+        /* font-size: 40px; */
+      }
+      .signup-heading p {
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+          sans-serif;
+        font-size: 14px;
       }
       .col img {
         max-width: 100%;
@@ -33,13 +39,31 @@
         display: block; /* Remove any default inline styling */
         margin: auto; /* Center the image */
       }
-      .input-width {
+      /* .input-width {
         width: 60%;
-      }
+      } */
       .signup-btn {
-        width: 65%;
+        width: 100%;
         display: flex;
         justify-content: center;
+      }
+
+      .signup-btn button {
+        padding: 10px 20px;
+        width: 100%;
+        border-radius: 15px;
+        background-color: #000814;
+        outline: none;
+        border: 1px solid white;
+        color: white;
+      }
+      .signup-btn button:hover {
+        background-color: #1787ef;
+        color: black;
+      }
+
+      .btn-color {
+        background-color: #1787ef;
       }
       .mtt {
         margin-top: 30px;
@@ -50,6 +74,95 @@
 
       .error {
         color: red;
+      }
+      .cont {
+        width: 80%;
+        margin: 10% auto;
+      }
+
+      .row {
+        margin-right: calc(-0 * var(--bs-gutter-x));
+        margin-left: calc(-0 * var(--bs-gutter-x));
+      }
+
+      .grid-right {
+        background-color: #020d1a;
+      }
+
+      .formbox {
+        width: 100%; /* Adjust the width as needed */
+        max-width: 400px; /* Optional: Set a maximum width for the form */
+        margin-top: 60px;
+      }
+
+      .formbox input {
+        border: 1px solid #fff; /* Set border color to white */
+        color: #fff; /* Set text color to white */
+        background-color: #000814;
+      }
+
+      .formbox input::placeholder {
+        color: #fff; /* Set placeholder text color to white */
+      }
+
+      .alert-design {
+        border-radius: 0px;
+        padding: 5px;
+      }
+
+      @media (min-width: 1400px) {
+        .container,
+        .container-lg,
+        .container-md,
+        .container-sm,
+        .container-xl,
+        .container-xxl {
+          max-width: 100%;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        .container,
+        .container-lg,
+        .container-md,
+        .container-sm,
+        .container-xl {
+          max-width: 100%;
+        }
+      }
+
+      @media (min-width: 992px) {
+        .container,
+        .container-lg,
+        .container-md,
+        .container-sm {
+          max-width: 100%;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .container,
+        .container-md,
+        .container-sm {
+          max-width: 100%;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .container,
+        .container-sm {
+          max-width: 100%;
+        }
+        .grid-left {
+          display: none;
+        }
+      }
+
+      @media (min-width: 576px) {
+        .container,
+        .container-sm {
+          max-width: 100%;
+        }
       }
     </style>
   </head>
@@ -84,106 +197,84 @@
     </nav>
 
     <div class="signup-container">
-      <div class="container text-center">
-        <div class="row pt-3">
-          <div class="col">
-            <img src="signIn_illustration.svg" alt="signIn_illustration" />
+      <div
+        class="alert alert-primary alert-design"
+        id="successAlert"
+        role="alert"
+        style="display: none"
+      >
+      <h6 id="successMessage"></h6>
+      </div>
+
+      <div
+        class="alert alert-warning alert-design"
+        id="warning"
+        role="alert"
+        style="display: none"
+      >
+        <h6 id="warningMessage"></h6>
+      </div>
+
+      <div
+        class="alert alert-danger alert-design"
+        id="danger"
+        role="alert"
+        style="display: none"
+      >
+        <h6 id="dangerMessage"></h6>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col grid-left">
+            <img
+              class="mt-4"
+              src="signIn_illustration.svg"
+              alt="signIn_illustration"
+            />
           </div>
-          <div class="col">
-            <div
-              class="alert alert-primary"
-              id="successAlert"
-              role="alert"
-              style="display: none"
-            >
-              <p id="successMessage"></p>
-              <button
-                type="button"
-                class="close"
-                data-dismiss="alert"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-
-            <div
-              class="alert alert-warning"
-              id="warning"
-              role="alert"
-              style="display: none"
-            >
-              <p id="warningMessage"></p>
-
-              <button
-                type="button"
-                class="close"
-                data-dismiss="alert"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-
-            <div
-              class="alert alert-danger"
-              id="danger"
-              role="alert"
-              style="display: none"
-            >
-              <p id="dangerMessage"></p>
-              <button
-                type="button"
-                class="close"
-                data-dismiss="alert"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-
-            <div class="signup-heading mt-5">
-              <h2>Login Budget Bharat</h2>
-            </div>
-
-            <form onsubmit="signinHandler(event)" class="formbox">
-              <div class="row mtt input-width">
-                <label class="col-sm-10" for="colFormLabelLg2"></label>
-                <input
-                  type="email"
-                  name="email"
-                  class="form-control"
-                  id="colFormLabelLg2"
-                  placeholder="email"
-                  autocomplete="email"
-                />
-                <div class="error"><p id="error2"></p></div>
+          <div class="col grid-right">
+            <div class="cont">
+              <div class="signup-heading">
+                <h2 class="display-6">Login Budget Bharat</h2>
               </div>
 
-              <div class="row mtt input-width">
-                <label class="col-sm-10" for="colFormLabelLg3"></label>
-                <input
-                  type="password"
-                  name="password"
-                  class="form-control"
-                  id="colFormLabelLg3"
-                  placeholder="password"
-                  autocomplete="new-password"
-                />
-                <div class="error"><p id="error3"></p></div>
-              </div>
+              <form onsubmit="signinHandler(event)" class="formbox">
+                <div class="row mt-4 input-width">
+                  <label class="col-sm-10" for="colFormLabelLg2"></label>
+                  <input
+                    type="email"
+                    name="email"
+                    class="form-control"
+                    id="colFormLabelLg2"
+                    placeholder="email"
+                    autocomplete="email"
+                  />
+                  <div class="error"><p id="error2"></p></div>
+                </div>
 
-              <div class="signup-btn mt-4">
-                <button type="submit" class="btn btn-warning">Sign In</button>
-              </div>
-            </form>
-            <a href="forgetPassword.html">forgetPassword</a>
+                <div class="row mt-4 input-width">
+                  <label class="col-sm-10" for="colFormLabelLg3"></label>
+                  <input
+                    type="password"
+                    name="password"
+                    class="form-control"
+                    id="colFormLabelLg3"
+                    placeholder="password"
+                    autocomplete="new-password"
+                  />
+                  <div class="error"><p id="error3"></p></div>
+                </div>
+
+                <div class="signup-btn mt-4">
+                  <button type="submit" class="">Sign In</button>
+                </div>
+              </form>
+              <a href="forgetPassword.html">forgetPassword</a>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-    
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>

@@ -1,10 +1,10 @@
-let formChecker = true;
+let formChecker = null;
 let resetPasswordURL = null;
 
 async function signupHandler(event) {
   try {
-    formChecker = true;
     event.preventDefault();
+    formChecker = true;
     const signupData = {
       name: event.target.name.value,
       email: event.target.email.value,
@@ -12,7 +12,9 @@ async function signupHandler(event) {
     };
 
     signupFormValidation(signupData);
+    console.log(formChecker);
     if (formChecker) {
+      console.log("jhbh");
       const responseData = await axios.post(
         "http://35.171.4.218:3000/user/signup",
         JSON.stringify(signupData),
@@ -22,7 +24,10 @@ async function signupHandler(event) {
           },
         }
       );
+      console.log(responseData);
       if (responseData.status === 201) {
+        document.getElementById("successMessage").innerHTML =
+            responseData.data.responseMessage;
         document.getElementById("successAlert").style.display = "block";
         document.getElementById("warning").style.display = "none";
         document.getElementById("danger").style.display = "none";
@@ -32,10 +37,15 @@ async function signupHandler(event) {
     }
   } catch (error) {
     if (error.response.status === 409) {
+      document.getElementById("warningMessage").innerHTML =
+        error.response.data.responseMessage;
       document.getElementById("warning").style.display = "block";
       document.getElementById("successAlert").style.display = "none";
       document.getElementById("danger").style.display = "none";
     } else {
+      document.getElementById("dangerMessage").innerHTML = error.response
+      ? error.response.data.responseMessage
+      : "Unknown error";
       document.getElementById("warning").style.display = "none";
       document.getElementById("successAlert").style.display = "block";
       document.getElementById("danger").style.display = "block";
@@ -46,11 +56,13 @@ async function signupHandler(event) {
 async function signinHandler(event) {
   try {
     event.preventDefault();
+    formChecker = true;
     const signinData = {
       email: event.target.email.value,
       password: event.target.password.value,
     };
     signinFormValidation(signinData);
+    console.log(formChecker);
     if (formChecker) {
       const responseData = await axios.post(
         "http://35.171.4.218:3000/user/signin",
@@ -61,6 +73,7 @@ async function signinHandler(event) {
           },
         }
       );
+      console.log(responseData);
       if (responseData) {
         if (responseData.status === 200) {
           console.log(responseData);
@@ -76,6 +89,7 @@ async function signinHandler(event) {
       }
     }
   } catch (error) {
+    console.log(error.response);
     if (error.response.status === 404) {
       document.getElementById("warningMessage").innerHTML =
         error.response.data.responseMessage;
@@ -105,11 +119,13 @@ async function signinHandler(event) {
 function signinFormValidation({ email, password }) {
   if (!email) {
     document.getElementById("error2").innerText = "*email is required";
+    formChecker = false;
   } else {
     document.getElementById("error2").innerText = "";
   }
   if (!password) {
     document.getElementById("error3").innerText = "*password is required";
+    formChecker = false;
   } else {
     document.getElementById("error3").innerText = "";
   }
@@ -117,19 +133,25 @@ function signinFormValidation({ email, password }) {
     formChecker = false;
   }
 }
+
+
+
 function signupFormValidation({ name, email, password }) {
   if (!name) {
     document.getElementById("error1").innerText = "*name is required";
+    formChecker = false;
   } else {
     document.getElementById("error1").innerText = "";
   }
   if (!email) {
     document.getElementById("error2").innerText = "*email is required";
+    formChecker = false;
   } else {
     document.getElementById("error2").innerText = "";
   }
   if (!password) {
     document.getElementById("error3").innerText = "*password is required";
+    formChecker = false;
   } else {
     document.getElementById("error3").innerText = "";
   }
@@ -137,6 +159,8 @@ function signupFormValidation({ name, email, password }) {
     formChecker = false;
   }
 }
+
+
 
 async function forgetPasswordHandler(event) {
   try {

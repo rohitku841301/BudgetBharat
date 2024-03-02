@@ -25,7 +25,16 @@ async function addExpenseFormHandler(event) {
       }
     );
     if (responseData.status === 201) {
-      showUser(responseData.data.responseData);
+      const expenseTable = document.getElementById("expenseTable");
+      expenseTable.remove();
+      const newResponseData = await fetchDataAndDisplay(token, pageNumber);
+      updatePaginationButton(newResponseData);
+
+      const allInput = form.getElementsByTagName("input");
+      for (let i = 0; i < allInput.length; i++) {
+        allInput[i].value = "";
+      }
+      form.querySelector("select").value = "0";
     }
   } catch (error) {
     if (error.response.status === 401 && statusText === "Unauthorized") {
@@ -38,7 +47,8 @@ async function addExpenseFormHandler(event) {
 async function deleteUserDetail(event) {
   try {
     const parent = event.target.parentNode;
-    expenseId = parent.querySelector(".id").innerText;
+    console.log(parent);
+    expenseId = parent.querySelector(".expenseId").innerText;
     console.log(expenseId);
     const token = localStorage.getItem("token");
     const deletedExpense = await axios.delete(
@@ -55,7 +65,6 @@ async function deleteUserDetail(event) {
     if (error.response.status) {
       console.log("sds");
     }
-    // console.log(error);
   }
 }
 
@@ -89,110 +98,159 @@ async function showLeaderboard(event) {
       }
     );
     if (responseData.status === 200) {
-      const div = document.createElement("div");
 
-      responseData.data.responseData.map((response) => {
-        console.log(response);
-        const p = document.createElement("p");
-        p.innerText = `UserID - ${response.id}, Name - ${response.name}, Total Amount - ${response.totalAmount}`;
-        div.append(p);
-      });
-      const leaderboard = document.querySelector(".leaderboard");
-      leaderboard.after(div);
+      leaderboardContent(responseData.data.responseData);
 
-      const container = document.querySelector(".container");
-      container.innerHTML = `<div class="container text-center">
-      <div class="row">
-        <div class="col">
-          <h1>Day to Day Expenses</h1>
-          <table class="table table-success table-striped-columns">
-            <thead>
-              <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Description</th>
-                <th scope="col">Category</th>
-                <th scope="col">Income</th>
-                <th scope="col">Expense</th>
-              </tr>
-            </thead>
-            <tbody class="table-group-divider">
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
+
+      // const div = document.createElement("div");
+
+      // responseData.data.responseData.map((response) => {
+      //   console.log(response);
+      //   const p = document.createElement("p");
+      //   p.innerText = `UserID - ${response.id}, Name - ${response.name}, Total Amount - ${response.totalAmount}`;
+      //   div.append(p);
+      // });
+      // const leaderboard = document.querySelector(".leaderboard");
+      // leaderboard.after(div);
+
+    //   const container = document.querySelector(".container");
+    //   container.innerHTML = `<div class="container text-center">
+    //   <div class="row">
+    //     <div class="col">
+    //       <h1>Day to Day Expenses</h1>
+    //       <table class="table table-success table-striped-columns">
+    //         <thead>
+    //           <tr>
+    //             <th scope="col">Date</th>
+    //             <th scope="col">Description</th>
+    //             <th scope="col">Category</th>
+    //             <th scope="col">Income</th>
+    //             <th scope="col">Expense</th>
+    //           </tr>
+    //         </thead>
+    //         <tbody class="table-group-divider">
+    //           <tr>
+    //             <th scope="row">1</th>
+    //             <td>Mark</td>
+    //             <td>Otto</td>
+    //             <td>@mdo</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">2</th>
+    //             <td>Jacob</td>
+    //             <td>Thornton</td>
+    //             <td>@fat</td>
+    //           </tr>
               
-            </tbody>
-          </table>
+    //         </tbody>
+    //       </table>
       
-          <h2>Yearly Report</h2>
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Month</th>
-                <th scope="col">Income</th>
-                <th scope="col">Expense</th>
-                <th scope="col">Saving</th>
-              </tr>
-            </thead>
-            <tbody class="table-group-divider">
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td colspan="2">Larry the Bird</td>
-                <td>@twitter</td>
-              </tr>
-            </tbody>
-          </table>
+    //       <h2>Yearly Report</h2>
+    //       <table class="table">
+    //         <thead>
+    //           <tr>
+    //             <th scope="col">Month</th>
+    //             <th scope="col">Income</th>
+    //             <th scope="col">Expense</th>
+    //             <th scope="col">Saving</th>
+    //           </tr>
+    //         </thead>
+    //         <tbody class="table-group-divider">
+    //           <tr>
+    //             <th scope="row">1</th>
+    //             <td>Mark</td>
+    //             <td>Otto</td>
+    //             <td>@mdo</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">2</th>
+    //             <td>Jacob</td>
+    //             <td>Thornton</td>
+    //             <td>@fat</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">3</th>
+    //             <td colspan="2">Larry the Bird</td>
+    //             <td>@twitter</td>
+    //           </tr>
+    //         </tbody>
+    //       </table>
 
-          <p>Notes Report 2021</p>
+    //       <p>Notes Report 2021</p>
 
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Notes</th>
-              </tr>
-            </thead>
-            <tbody class="table-group-divider">
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-              </tr>
+    //       <table class="table">
+    //         <thead>
+    //           <tr>
+    //             <th scope="col">Date</th>
+    //             <th scope="col">Notes</th>
+    //           </tr>
+    //         </thead>
+    //         <tbody class="table-group-divider">
+    //           <tr>
+    //             <th scope="row">1</th>
+    //             <td>Mark</td>
+    //           </tr>
+    //           <tr>
+    //             <th scope="row">2</th>
+    //             <td>Jacob</td>
+    //           </tr>
             
-            </tbody>
-          </table>
-        </div>
+    //         </tbody>
+    //       </table>
+    //     </div>
         
-      </div>
-    </div>`;
+    //   </div>
+    // </div>`;
     }
 
     console.log(responseData);
   } catch (error) {
     console.log(error);
+  }
+}
+
+function leaderboardContent(leaderboardData){
+  console.log("-----",leaderboardData);
+  document.querySelector(".leaderboaredContainer").style.display="block";
+  document.getElementById("ledearActive").classList.add("active");
+  
+  const leaderData = document.getElementById("leaderData")
+  const allTr = leaderData.querySelectorAll("tr");
+  allTr.forEach((tr) => {
+    tr.remove();
+  });
+  leaderboardData.map((data)=>{
+    const tr = document.createElement("tr");
+    const td1 = document.createElement("td");
+    td1.innerText = data.id;
+    const td2 = document.createElement("td");
+    td2.innerText = data.name;
+    const td3 = document.createElement("td");
+    td3.innerText = data.totalAmount;
+    tr.append(td1);
+    tr.append(td2);
+    tr.append(td3);
+    leaderData.append(tr);
+  })
+}
+
+async function showMonthlyExpense(event){
+  try {
+    event.preventDefault();
+    const token = localStorage.getItem("token");
+    const responseData = await axios.get(
+      "http://35.171.4.218:3000/expense/premium/monthly-Expense",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      }
+    );
+    console.log(responseData);
+
+  } catch (error) {
+    
   }
 }
 
@@ -227,18 +285,57 @@ async function premiumUserFunctionality(token) {
     if (payload.isPremium) {
       document.getElementById("disappear").style.display = "none";
       document.getElementById("premium").innerHTML = "premium user";
-      const leaderboard = document.createElement("button");
-      leaderboard.innerText = "Leaderboard";
-      leaderboard.classList.add("leaderboard");
-      leaderboard.setAttribute("onclick", "showLeaderboard(event)");
 
-      const downloadFile = document.createElement("button");
-      downloadFile.innerText = "Download";
-      downloadFile.classList.add("download");
-      downloadFile.setAttribute("onclick", "downloadFile(event)");
-      const premiumButton = document.querySelector(".premiumButton");
-      premiumButton.append(leaderboard);
-      premiumButton.append(downloadFile);
+      const allPremiumFeature = document.getElementById("allPremiumFeature");
+      allPremiumFeature.innerHTML = `<div class="row">
+          <div class="col ">
+            <h6 class="display-6">Premium Features</h6>
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a class="nav-link " id="ledearActive" aria-current="page" onclick="showLeaderboard(event)">Leaderboared</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link " aria-current="page" onclick="showMonthlyExpense(event)">Monthly Expense</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link " aria-current="page" href="#">Yearly Expense</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link " aria-current="page" href="#">Dowload</a>
+              </li>
+              
+            </ul>
+
+            <div class="leaderboaredContainer">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">UserId</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Total Expense</th>
+                  </tr>
+                </thead >
+                <tbody id="leaderData">
+                </tbody>
+              </table>
+            </div>
+
+
+          </div>
+        </div>`
+
+      // const leaderboard = document.createElement("button");
+      // leaderboard.innerText = "Leaderboard";
+      // leaderboard.classList.add("leaderboard");
+      // leaderboard.setAttribute("onclick", "showLeaderboard(event)");
+
+      // const downloadFile = document.createElement("button");
+      // downloadFile.innerText = "Download";
+      // downloadFile.classList.add("download");
+      // downloadFile.setAttribute("onclick", "downloadFile(event)");
+      // const premiumButton = document.querySelector(".premiumButton");
+      // premiumButton.append(leaderboard);
+      // premiumButton.append(downloadFile);
     }
   } catch (error) {
     console.log(error.message);
@@ -253,16 +350,22 @@ function displayUserDetails(expenseDetails) {
     const tr = document.createElement("tr");
     const td1 = document.createElement("td");
     td1.innerText = expense.id;
+    td1.classList.add("expenseId")
     const td2 = document.createElement("td");
     td2.innerText = expense.amount;
     const td3 = document.createElement("td");
     td3.innerText = expense.category;
     const td4 = document.createElement("td");
     td4.innerText = expense.description;
+    const td5 = document.createElement("button");
+    td5.innerText = "Delete";
+    td5.classList.add("deleteTableBtn")
+    td5.setAttribute("onclick", "deleteUserDetail(event)");
     tr.append(td1);
     tr.append(td2);
     tr.append(td3);
     tr.append(td4);
+    tr.append(td5);
     expenseTable.append(tr);
   });
   const table = document.getElementById("table");
@@ -272,7 +375,7 @@ function displayUserDetails(expenseDetails) {
 async function fetchDataAndDisplay(token, pageNumber) {
   try {
     let rows = localStorage.getItem("rows");
-    if(rows===null){
+    if (rows === null) {
       rows = 3;
     }
     const response = await axios.get(
@@ -305,18 +408,35 @@ window.addEventListener("DOMContentLoaded", async () => {
     await premiumUserFunctionality(token);
 
     const fetchData = await fetchDataAndDisplay(token, pageNumber);
-
-    for (let i = 1; i <= fetchData.totalPages; i++) {
-      const newPageBtn = document.createElement("button");
-      newPageBtn.innerText = i;
-      newPageBtn.setAttribute("onclick", "currentPageBtn(event)");
-      const paginationButtons = document.querySelector(".paginationButtons");
-      paginationButtons.append(newPageBtn);
-    }
+    // console.log("---", fetchData);
+    updatePaginationButton(fetchData);
   } catch (error) {
     console.log(error);
   }
 });
+
+function updatePaginationButton(fetchData) {
+  const paginationButtons = document.querySelector(".paginationButtons");
+  const buttonsToRemove = paginationButtons.querySelectorAll("button");
+  buttonsToRemove.forEach((button) => {
+    button.remove();
+  });
+  for (let i = 1; i <= fetchData.totalPages; i++) {
+    
+    const newPageBtn = document.createElement("button");
+    newPageBtn.innerText = i;
+    newPageBtn.classList.add("btn")
+    newPageBtn.classList.add("btn-outline-secondary")
+    newPageBtn.setAttribute("onclick", "currentPageBtn(event)");
+    if(fetchData.currentPage===i){
+      console.log("hit me");
+      newPageBtn.style.backgroundColor = "#6c63ff";
+      newPageBtn.style.color = "white";
+
+    }
+    paginationButtons.append(newPageBtn);
+  }
+}
 
 async function currentPageBtn(event) {
   try {
@@ -324,7 +444,9 @@ async function currentPageBtn(event) {
     const currentButtonClicked = event.target.innerText;
     const expenseTable = document.getElementById("expenseTable");
     expenseTable.remove();
-    await fetchDataAndDisplay(token, currentButtonClicked);
+     const updateButton = await fetchDataAndDisplay(token, currentButtonClicked);
+     updatePaginationButton(updateButton);
+  
   } catch (error) {
     console.log(error);
   }
@@ -370,5 +492,6 @@ document
     const token = localStorage.getItem("token");
     const expenseTable = document.getElementById("expenseTable");
     expenseTable.remove();
-    await fetchDataAndDisplay(token, pageNumber);
+    const updateButton = await fetchDataAndDisplay(token, pageNumber);
+    updatePaginationButton(updateButton);
   });

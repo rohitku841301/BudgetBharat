@@ -22,7 +22,7 @@ const app = express();
 
 // const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
 
-// app.use(morgan('combined'));
+app.use(morgan('combined'));
 app.use(compression());
 app.use(helmet({
   contentSecurityPolicy: false,
@@ -36,6 +36,8 @@ app.use(
 
 const pathFile = path.join(__dirname, `../frontend`);
 console.log(pathFile);
+
+
 
 app.use("/user", userRoute);
 app.use("/expense", expenseRoute);
@@ -54,6 +56,7 @@ User.hasMany(Order);
 Order.belongsTo(User);
 
 sequelize
+  // .sync({force:true})
   .sync()
   .then((result) => {
     app.listen(process.env.PORT, () => {

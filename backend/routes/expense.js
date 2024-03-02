@@ -10,6 +10,6 @@ router.get("/get-Expense/:currentPage", middlewear.authentication, expenseContro
 router.delete("/delete-Expense/:id", middlewear.authentication, expenseController.deleteExpense)
 
 router.get('/premium/leaderboard', middlewear.authentication, expenseController.showLeaderboard);
-
+router.get("/premium/monthly-Expense", middlewear.authentication, expenseController.monthlyExpense);
 
 module.exports = router;
