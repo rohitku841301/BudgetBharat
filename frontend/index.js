@@ -27,7 +27,7 @@ async function signupHandler(event) {
       console.log(responseData);
       if (responseData.status === 201) {
         document.getElementById("successMessage").innerHTML =
-            responseData.data.responseMessage;
+          responseData.data.responseMessage;
         document.getElementById("successAlert").style.display = "block";
         document.getElementById("warning").style.display = "none";
         document.getElementById("danger").style.display = "none";
@@ -44,8 +44,8 @@ async function signupHandler(event) {
       document.getElementById("danger").style.display = "none";
     } else {
       document.getElementById("dangerMessage").innerHTML = error.response
-      ? error.response.data.responseMessage
-      : "Unknown error";
+        ? error.response.data.responseMessage
+        : "Unknown error";
       document.getElementById("warning").style.display = "none";
       document.getElementById("successAlert").style.display = "block";
       document.getElementById("danger").style.display = "block";
@@ -134,8 +134,6 @@ function signinFormValidation({ email, password }) {
   }
 }
 
-
-
 function signupFormValidation({ name, email, password }) {
   if (!name) {
     document.getElementById("error1").innerText = "*name is required";
@@ -160,39 +158,48 @@ function signupFormValidation({ name, email, password }) {
   }
 }
 
-
-
 async function forgetPasswordHandler(event) {
   try {
     event.preventDefault();
+
     const forgetEmail = {
       email: event.target.forgetEmail.value,
     };
-    const forgetEmailData = await axios.post(
-      "http://35.171.4.218:3000/user/password/forget-password",
-      JSON.stringify(forgetEmail),
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
+    if (!forgetEmail.email) {
+      document.getElementById("error1").innerText = "*this field is required";
+    } else {
+      const forgetEmailData = await axios.post(
+        "http://35.171.4.218:3000/user/password/forget-password",
+        JSON.stringify(forgetEmail),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(forgetEmailData);
+      if (forgetEmailData.status === 201) {
+        document.getElementById("successMessage").innerHTML =
+          forgetEmailData.data.responseMessage;
+        document.getElementById("successAlert").style.display = "block";
+        document.getElementById("warning").style.display = "none";
+        document.getElementById("danger").style.display = "none";
       }
-    );
-    console.log(forgetEmailData);
-    if (forgetEmailData.status === 201) {
-      console.log("all okay");
-      resetPasswordURL = forgetEmailData.data.url;
-      document.getElementById("successMessage").innerHTML =
-        forgetEmailData.data.responseMessage;
-      document.getElementById("successAlert").style.display = "block";
     }
   } catch (error) {
     if (error.response.status === 404) {
       document.getElementById("warningMessage").innerHTML =
         error.response.data.responseMessage;
       document.getElementById("warning").style.display = "block";
-      console.log(error.response.data.responseMessage);
+      document.getElementById("successAlert").style.display = "none";
+      document.getElementById("danger").style.display = "none";
     } else if (error.response.status === 500) {
-      console.log(error.response.data.responseMessage);
+      document.getElementById("dangerMessage").innerHTML = error.response
+        ? error.response.data.responseMessage
+        : "Unknown error";
+      document.getElementById("warning").style.display = "none";
+      document.getElementById("successAlert").style.display = "block";
+      document.getElementById("danger").style.display = "block";
     } else {
       console.log(error);
     }
@@ -211,30 +218,60 @@ async function resetPasswordHandler(event) {
     resetData = {
       newPassword: event.target.newPassword.value,
     };
+    if (!resetData.newPassword) {
+      document.getElementById("error1").innerText = "*this field is required";
+    } else {
+      const uuid = getUUIDFromUrl();
 
-    const uuid = getUUIDFromUrl();
+      const responseData = await axios.post(
+        `http://35.171.4.218:3000/user/password/reset-password/${uuid}`,
+        JSON.stringify(resetData),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(responseData);
+      if (responseData.status === 200) {
+        console.log(("-------"));
+        document.getElementById("successMessage").innerHTML =
+        responseData.data.responseMessage;
+        console.log(("-------"));
 
-    const responseData = await axios.post(
-      `http://35.171.4.218:3000/user/password/reset-password/${uuid}`,
-      JSON.stringify(resetData),
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
+      document.getElementById("successAlert").style.display = "block";
+      console.log(("-------"));
+
+      document.getElementById("warning").style.display = "none";
+      console.log(("-------"));
+
+      document.getElementById("danger").style.display = "none";
+      console.log(("-------"));
+
       }
-    );
-    if(responseData.status===200){
-
     }
   } catch (error) {
     console.log(error);
-    if(error.response.status === 400){
-
-    }else if(error.response.status === 404){
-
-    }else if(error.response.status === 500){
-
-    }else{
+    if (error.response.status === 400) {
+      document.getElementById("warningMessage").innerHTML =
+        error.response.data.responseMessage;
+      document.getElementById("warning").style.display = "block";
+      document.getElementById("successAlert").style.display = "none";
+      document.getElementById("danger").style.display = "none";
+    } else if (error.response.status === 404) {
+      document.getElementById("warningMessage").innerHTML =
+        error.response.data.responseMessage;
+      document.getElementById("warning").style.display = "block";
+      document.getElementById("successAlert").style.display = "none";
+      document.getElementById("danger").style.display = "none";
+    } else if (error.response.status === 500) {
+      document.getElementById("dangerMessage").innerHTML = error.response
+        ? error.response.data.responseMessage
+        : "Unknown error";
+      document.getElementById("warning").style.display = "none";
+      document.getElementById("successAlert").style.display = "block";
+      document.getElementById("danger").style.display = "block";
+    } else {
       console.log(error);
     }
   }

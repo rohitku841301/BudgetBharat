@@ -136,7 +136,7 @@ exports.postResetPassword = async (req, res, next) => {
           }else{
             await User.update({ password: hash }, { where: { id: user.userId } })
             await Forget.update({ isActive: false }, { where: { id: uuid } })
-            res.status(200).status({
+            res.status(200).json({
               responseMessage:"password has changed successfully"
             })
           }
@@ -166,7 +166,7 @@ exports.forgetPassword = async (req, res, next) => {
     });
     if (forgetEmail) {
       const uuid = uuidv4();
-      const url = `http://127.0.0.1:5500/frontend/resetPassword.html?uuid=${uuid}`;
+      const url = `http://35.171.4.218:3000/frontend/resetPassword.html?uuid=${uuid}`;  
       const resetData = await Forget.create({
         id: uuid,
         userId: forgetEmail.id,
@@ -176,7 +176,7 @@ exports.forgetPassword = async (req, res, next) => {
       if (resetData) {
         console.log(url);
         res.status(201).json({
-          responseMessage: "Check your email",
+          responseMessage: "Please check your email for password reset",
           url: url,
         });
       }

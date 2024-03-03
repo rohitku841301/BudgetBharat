@@ -98,9 +98,7 @@ async function showLeaderboard(event) {
       }
     );
     if (responseData.status === 200) {
-
       leaderboardContent(responseData.data.responseData);
-
 
       // const div = document.createElement("div");
 
@@ -113,94 +111,94 @@ async function showLeaderboard(event) {
       // const leaderboard = document.querySelector(".leaderboard");
       // leaderboard.after(div);
 
-    //   const container = document.querySelector(".container");
-    //   container.innerHTML = `<div class="container text-center">
-    //   <div class="row">
-    //     <div class="col">
-    //       <h1>Day to Day Expenses</h1>
-    //       <table class="table table-success table-striped-columns">
-    //         <thead>
-    //           <tr>
-    //             <th scope="col">Date</th>
-    //             <th scope="col">Description</th>
-    //             <th scope="col">Category</th>
-    //             <th scope="col">Income</th>
-    //             <th scope="col">Expense</th>
-    //           </tr>
-    //         </thead>
-    //         <tbody class="table-group-divider">
-    //           <tr>
-    //             <th scope="row">1</th>
-    //             <td>Mark</td>
-    //             <td>Otto</td>
-    //             <td>@mdo</td>
-    //           </tr>
-    //           <tr>
-    //             <th scope="row">2</th>
-    //             <td>Jacob</td>
-    //             <td>Thornton</td>
-    //             <td>@fat</td>
-    //           </tr>
-              
-    //         </tbody>
-    //       </table>
-      
-    //       <h2>Yearly Report</h2>
-    //       <table class="table">
-    //         <thead>
-    //           <tr>
-    //             <th scope="col">Month</th>
-    //             <th scope="col">Income</th>
-    //             <th scope="col">Expense</th>
-    //             <th scope="col">Saving</th>
-    //           </tr>
-    //         </thead>
-    //         <tbody class="table-group-divider">
-    //           <tr>
-    //             <th scope="row">1</th>
-    //             <td>Mark</td>
-    //             <td>Otto</td>
-    //             <td>@mdo</td>
-    //           </tr>
-    //           <tr>
-    //             <th scope="row">2</th>
-    //             <td>Jacob</td>
-    //             <td>Thornton</td>
-    //             <td>@fat</td>
-    //           </tr>
-    //           <tr>
-    //             <th scope="row">3</th>
-    //             <td colspan="2">Larry the Bird</td>
-    //             <td>@twitter</td>
-    //           </tr>
-    //         </tbody>
-    //       </table>
+      //   const container = document.querySelector(".container");
+      //   container.innerHTML = `<div class="container text-center">
+      //   <div class="row">
+      //     <div class="col">
+      //       <h1>Day to Day Expenses</h1>
+      //       <table class="table table-success table-striped-columns">
+      //         <thead>
+      //           <tr>
+      //             <th scope="col">Date</th>
+      //             <th scope="col">Description</th>
+      //             <th scope="col">Category</th>
+      //             <th scope="col">Income</th>
+      //             <th scope="col">Expense</th>
+      //           </tr>
+      //         </thead>
+      //         <tbody class="table-group-divider">
+      //           <tr>
+      //             <th scope="row">1</th>
+      //             <td>Mark</td>
+      //             <td>Otto</td>
+      //             <td>@mdo</td>
+      //           </tr>
+      //           <tr>
+      //             <th scope="row">2</th>
+      //             <td>Jacob</td>
+      //             <td>Thornton</td>
+      //             <td>@fat</td>
+      //           </tr>
 
-    //       <p>Notes Report 2021</p>
+      //         </tbody>
+      //       </table>
 
-    //       <table class="table">
-    //         <thead>
-    //           <tr>
-    //             <th scope="col">Date</th>
-    //             <th scope="col">Notes</th>
-    //           </tr>
-    //         </thead>
-    //         <tbody class="table-group-divider">
-    //           <tr>
-    //             <th scope="row">1</th>
-    //             <td>Mark</td>
-    //           </tr>
-    //           <tr>
-    //             <th scope="row">2</th>
-    //             <td>Jacob</td>
-    //           </tr>
-            
-    //         </tbody>
-    //       </table>
-    //     </div>
-        
-    //   </div>
-    // </div>`;
+      //       <h2>Yearly Report</h2>
+      //       <table class="table">
+      //         <thead>
+      //           <tr>
+      //             <th scope="col">Month</th>
+      //             <th scope="col">Income</th>
+      //             <th scope="col">Expense</th>
+      //             <th scope="col">Saving</th>
+      //           </tr>
+      //         </thead>
+      //         <tbody class="table-group-divider">
+      //           <tr>
+      //             <th scope="row">1</th>
+      //             <td>Mark</td>
+      //             <td>Otto</td>
+      //             <td>@mdo</td>
+      //           </tr>
+      //           <tr>
+      //             <th scope="row">2</th>
+      //             <td>Jacob</td>
+      //             <td>Thornton</td>
+      //             <td>@fat</td>
+      //           </tr>
+      //           <tr>
+      //             <th scope="row">3</th>
+      //             <td colspan="2">Larry the Bird</td>
+      //             <td>@twitter</td>
+      //           </tr>
+      //         </tbody>
+      //       </table>
+
+      //       <p>Notes Report 2021</p>
+
+      //       <table class="table">
+      //         <thead>
+      //           <tr>
+      //             <th scope="col">Date</th>
+      //             <th scope="col">Notes</th>
+      //           </tr>
+      //         </thead>
+      //         <tbody class="table-group-divider">
+      //           <tr>
+      //             <th scope="row">1</th>
+      //             <td>Mark</td>
+      //           </tr>
+      //           <tr>
+      //             <th scope="row">2</th>
+      //             <td>Jacob</td>
+      //           </tr>
+
+      //         </tbody>
+      //       </table>
+      //     </div>
+
+      //   </div>
+      // </div>`;
     }
 
     console.log(responseData);
@@ -209,17 +207,20 @@ async function showLeaderboard(event) {
   }
 }
 
-function leaderboardContent(leaderboardData){
-  console.log("-----",leaderboardData);
-  document.querySelector(".leaderboaredContainer").style.display="block";
+function leaderboardContent(leaderboardData) {
+  document.querySelector(".downloadedFileContainer").style.display = "none";
+  document.getElementById("downloadedActive").classList.remove("active");
+
+  console.log("-----", leaderboardData);
+  document.querySelector(".leaderboaredContainer").style.display = "block";
   document.getElementById("ledearActive").classList.add("active");
-  
-  const leaderData = document.getElementById("leaderData")
+
+  const leaderData = document.getElementById("leaderData");
   const allTr = leaderData.querySelectorAll("tr");
   allTr.forEach((tr) => {
     tr.remove();
   });
-  leaderboardData.map((data)=>{
+  leaderboardData.map((data) => {
     const tr = document.createElement("tr");
     const td1 = document.createElement("td");
     td1.innerText = data.id;
@@ -231,10 +232,10 @@ function leaderboardContent(leaderboardData){
     tr.append(td2);
     tr.append(td3);
     leaderData.append(tr);
-  })
+  });
 }
 
-async function showMonthlyExpense(event){
+async function showMonthlyExpense(event) {
   try {
     event.preventDefault();
     const token = localStorage.getItem("token");
@@ -248,10 +249,7 @@ async function showMonthlyExpense(event){
       }
     );
     console.log(responseData);
-
-  } catch (error) {
-    
-  }
+  } catch (error) {}
 }
 
 async function downloadFile(event) {
@@ -279,6 +277,62 @@ async function downloadFile(event) {
   }
 }
 
+async function showAllDownloadFiles(event) {
+  try {
+    event.preventDefault();
+    const token = localStorage.getItem("token");
+    const downloadedFile = await axios.get(
+      "http://35.171.4.218:3000/user/showDownloadedFile",
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    if (downloadedFile.status === 200) {
+      console.log("cxc");
+      console.log(downloadedFile);
+
+      displayDownloadedFile(downloadedFile.data.allFile);
+    }
+  } catch (error) {
+    if (error.response.status === 404) {
+      console.log("files are not found");
+    } else if (error.response.status === 500) {
+      console.log("internal server problem");
+    } else {
+      console.log(error);
+    }
+  }
+}
+
+function displayDownloadedFile(downloadedFile) {
+  document.querySelector(".leaderboaredContainer").style.display = "none";
+  document.getElementById("ledearActive").classList.remove("active");
+  console.log(downloadedFile);
+  document.querySelector(".downloadedFileContainer").style.display = "block";
+  document.getElementById("downloadedActive").classList.add("active");
+
+  const downloadedData = document.getElementById("downloadedData");
+  const allTr = downloadedData.querySelectorAll("tr");
+  allTr.forEach((tr) => {
+    tr.remove();
+  });
+  downloadedFile.map((data) => {
+    const tr = document.createElement("tr");
+    const td1 = document.createElement("td");
+    td1.innerText = data.createdAt;
+    const anchor = document.createElement("a");
+    anchor.setAttribute("href", `${data.fileURL}`);
+    const td2 = document.createElement("td");
+    anchor.innerText = data.fileURL;
+    td2.append(anchor);
+    tr.append(td1);
+    tr.append(td2);
+    downloadedData.append(tr);
+  });
+}
+
 async function premiumUserFunctionality(token) {
   try {
     const payload = parseJwt(token);
@@ -301,13 +355,16 @@ async function premiumUserFunctionality(token) {
                 <a class="nav-link " aria-current="page" href="#">Yearly Expense</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link " aria-current="page" href="#">Dowload</a>
+                <a class="nav-link " aria-current="page" onclick="downloadFile(event)">Dowload</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link " id="downloadedActive" aria-current="page" onclick="showAllDownloadFiles(event)">Dowloaded Files</a>
               </li>
               
             </ul>
 
             <div class="leaderboaredContainer">
-              <table class="table">
+              <table class="table table-dark table-striped">
                 <thead>
                   <tr>
                     <th scope="col">UserId</th>
@@ -320,9 +377,22 @@ async function premiumUserFunctionality(token) {
               </table>
             </div>
 
+            <div class="downloadedFileContainer">
+              <table class="table table-dark table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">CreatedAt</th>
+                    <th scope="col">Filename</th>
+                  </tr>
+                </thead >
+                <tbody id="downloadedData">
+                </tbody>
+              </table>
+            </div>
+
 
           </div>
-        </div>`
+        </div>`;
 
       // const leaderboard = document.createElement("button");
       // leaderboard.innerText = "Leaderboard";
@@ -350,7 +420,7 @@ function displayUserDetails(expenseDetails) {
     const tr = document.createElement("tr");
     const td1 = document.createElement("td");
     td1.innerText = expense.id;
-    td1.classList.add("expenseId")
+    td1.classList.add("expenseId");
     const td2 = document.createElement("td");
     td2.innerText = expense.amount;
     const td3 = document.createElement("td");
@@ -359,7 +429,7 @@ function displayUserDetails(expenseDetails) {
     td4.innerText = expense.description;
     const td5 = document.createElement("button");
     td5.innerText = "Delete";
-    td5.classList.add("deleteTableBtn")
+    td5.classList.add("deleteTableBtn");
     td5.setAttribute("onclick", "deleteUserDetail(event)");
     tr.append(td1);
     tr.append(td2);
@@ -422,17 +492,15 @@ function updatePaginationButton(fetchData) {
     button.remove();
   });
   for (let i = 1; i <= fetchData.totalPages; i++) {
-    
     const newPageBtn = document.createElement("button");
     newPageBtn.innerText = i;
-    newPageBtn.classList.add("btn")
-    newPageBtn.classList.add("btn-outline-secondary")
+    newPageBtn.classList.add("btn");
+    newPageBtn.classList.add("btn-outline-secondary");
     newPageBtn.setAttribute("onclick", "currentPageBtn(event)");
-    if(fetchData.currentPage===i){
+    if (fetchData.currentPage === i) {
       console.log("hit me");
       newPageBtn.style.backgroundColor = "#6c63ff";
       newPageBtn.style.color = "white";
-
     }
     paginationButtons.append(newPageBtn);
   }
@@ -444,9 +512,8 @@ async function currentPageBtn(event) {
     const currentButtonClicked = event.target.innerText;
     const expenseTable = document.getElementById("expenseTable");
     expenseTable.remove();
-     const updateButton = await fetchDataAndDisplay(token, currentButtonClicked);
-     updatePaginationButton(updateButton);
-  
+    const updateButton = await fetchDataAndDisplay(token, currentButtonClicked);
+    updatePaginationButton(updateButton);
   } catch (error) {
     console.log(error);
   }
@@ -495,3 +562,7 @@ document
     const updateButton = await fetchDataAndDisplay(token, pageNumber);
     updatePaginationButton(updateButton);
   });
+
+document.getElementById("logout").addEventListener("click",()=>{
+  localStorage.removeItem("token");
+})

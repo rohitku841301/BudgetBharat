@@ -273,3 +273,31 @@ exports.downloadFile = async (req, res, next) => {
     });
   }
 };
+
+exports.showDownloadedFile = async (req,res,next) =>{
+  try {
+    console.log(req.existingUser);
+    console.log("sdsdsdfsfsfd");
+    const allFile = await File.findAll({
+      where:{userId:req.existingUser.id}
+    })
+    console.log(allFile);
+    if(allFile){
+      res.status(200).json({
+        responseMessage:"get all file",
+        success:true,
+        allFile:allFile
+      })
+    }else{
+      res.status(404).json({
+        responseMessage:"files are not found",
+        success:false
+      })
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      responseMessage: "Something Went Wrong",
+    });
+  }
+}

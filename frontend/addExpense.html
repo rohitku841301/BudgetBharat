@@ -61,7 +61,7 @@
       }
 
       .signup-btn {
-        width: 100%;
+      
         display: flex;
         justify-content: center;
       }
@@ -69,7 +69,7 @@
       .signup-btn button {
         padding: 10px 20px;
         width: 100%;
-        border-radius: 15px;
+        border-radius: 10px;
         background-color: #000814;
         outline: none;
         border: 1px solid white;
@@ -85,10 +85,16 @@
         margin: 10% auto;
       }
 
+      .cont h2{
+        margin: 0px;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-weight: 800;
+      }
+
       .formbox {
         width: 100%; /* Adjust the width as needed */
         max-width: 400px; /* Optional: Set a maximum width for the form */
-        margin-top: 60px;
+        margin-top: 45px;
       }
 
       .formbox input {
@@ -105,14 +111,24 @@
         width: 100%;
       }
 
-      .premium{
+      .premium {
         color: white;
-      padding: 40px 0px;
       }
 
-      .leaderboaredContainer{
+      .leaderboaredContainer {
         display: none;
-        
+      }
+      .downloadedFileContainer {
+        display: none;
+      }
+
+      #table th,
+      tr {
+        word-break: break-all;
+      }
+
+      .display-6 {
+        margin: 14px;
       }
 
       @media (min-width: 1400px) {
@@ -215,15 +231,16 @@
       </div>
     </nav>
 
-    <h4 id="premium"></h4>
 
     <div class="signup-container">
+    <h4 id="premium"></h4>
+
       <div class="container">
         <div class="row">
           <div class="col">
             <div class="cont">
               <div class="signup-heading">
-                <h2 class="display-6">Add Expense</h2>
+                <h2 class="display-5">Add Expense</h2>
                 <!-- <p>
                   Empower your financial journey – Track every expense, create
                   an account, and seize control of your financial well-being
@@ -272,26 +289,11 @@
                   <!-- <div class="error"><p id="error3"></p></div> -->
                 </div>
 
-                <div class="signup-btn mt-4">
+                <div class="row signup-btn mt-4">
                   <button type="submit" class="">Add Expense</button>
                 </div>
               </form>
             </div>
-
-            <!-- <form onsubmit="addExpenseFormHandler(event)">
-              <label for="amout">Amount</label>
-              <input type="number" id="amount" name="amount" />
-              <label for="description">Description</label>
-              <input type="text" id="description" name="description" />
-              <label for="category">Category</label>
-              <select name="category" id="category">
-                <option value="food">Food</option>
-                <option value="petrol">Petrol</option>
-                <option value="salary">Salary</option>
-                <option value="other">Other</option>
-              </select>
-              <button type="submit">Add Expense</button>
-            </form> -->
           </div>
           <div class="col grid-right">
             <img class="mt-4" src="addExpenseImage.svg" alt="addExpense" />
@@ -328,11 +330,9 @@
 
       <div class="paginationButtons"></div>
 
-      <div class="container"></div>
+      <!-- <div class="container"></div> -->
 
-      <div class="container premium" id="allPremiumFeature">
-        
-      </div>
+      <div class="container premium mt-5" id="allPremiumFeature"></div>
 
       <div class="premiumButton"></div>
     </div>
