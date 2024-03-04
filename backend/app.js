@@ -20,7 +20,6 @@ const Order = require("./models/order");
 const app = express();
 
 
-// const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
 
 app.use(morgan('combined'));
 app.use(compression());
@@ -38,6 +37,7 @@ const pathFile = path.join(__dirname, `../frontend`);
 console.log(pathFile);
 
 
+app.use('/frontend', express.static(path.join(__dirname, '../frontend')));
 
 app.use("/user", userRoute);
 app.use("/expense", expenseRoute);

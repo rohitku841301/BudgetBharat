@@ -2,45 +2,77 @@ const form = document.querySelector("form");
 
 let expenseId = null;
 let pageNumber = 1;
+let formChecker = null;
 
 async function addExpenseFormHandler(event) {
   try {
     event.preventDefault();
+    formChecker = true;
     const expenseData = {
       amount: event.target.amount.value,
       description: event.target.description.value,
       category: event.target.category.value,
     };
-    console.log(expenseData);
-    const token = localStorage.getItem("token");
 
-    const responseData = await axios.post(
-      "http://35.171.4.218:3000/expense/add-Expense",
-      JSON.stringify(expenseData),
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-      }
-    );
-    if (responseData.status === 201) {
-      const expenseTable = document.getElementById("expenseTable");
-      expenseTable.remove();
-      const newResponseData = await fetchDataAndDisplay(token, pageNumber);
-      updatePaginationButton(newResponseData);
+    validationExpenseFormHandler(expenseData);
 
-      const allInput = form.getElementsByTagName("input");
-      for (let i = 0; i < allInput.length; i++) {
-        allInput[i].value = "";
+    if (formChecker) {
+      const token = localStorage.getItem("token");
+
+      const responseData = await axios.post(
+        "http://35.171.4.218:3000/expense/add-Expense",
+        JSON.stringify(expenseData),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      );
+      if (responseData.status === 201) {
+        const expenseTable = document.getElementById("expenseTable");
+        expenseTable.remove();
+        const newResponseData = await fetchDataAndDisplay(token, pageNumber);
+        updatePaginationButton(newResponseData);
+
+        const allInput = form.getElementsByTagName("input");
+        for (let i = 0; i < allInput.length; i++) {
+          allInput[i].value = "";
+        }
+        form.querySelector("select").value = "0";
       }
-      form.querySelector("select").value = "0";
     }
   } catch (error) {
     if (error.response.status === 401 && statusText === "Unauthorized") {
       window.location.href = "frontend/addExpense.html";
     }
     console.log(error);
+  }
+}
+
+function validationExpenseFormHandler({ amount, description, category }) {
+  console.log(amount);
+  console.log(category);
+  if (!amount) {
+    document.getElementById("error1").innerText = "*amount is required";
+    formChecker = false;
+  } else {
+    document.getElementById("error1").innerText = "";
+  }
+  if (!description) {
+    document.getElementById("error2").innerText = "*description is required";
+    formChecker = false;
+  } else {
+    document.getElementById("error2").innerText = "";
+  }
+  if (category === "category") {
+    document.getElementById("error3").innerText = "*category is required";
+    formChecker = false;
+  } else {
+    document.getElementById("error3").innerText = "";
+  }
+  if (!amount && !description && category === "category") {
+    formChecker = false;
   }
 }
 
@@ -348,12 +380,7 @@ async function premiumUserFunctionality(token) {
               <li class="nav-item">
                 <a class="nav-link " id="ledearActive" aria-current="page" onclick="showLeaderboard(event)">Leaderboared</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link " aria-current="page" onclick="showMonthlyExpense(event)">Monthly Expense</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link " aria-current="page" href="#">Yearly Expense</a>
-              </li>
+            
               <li class="nav-item">
                 <a class="nav-link " aria-current="page" onclick="downloadFile(event)">Dowload</a>
               </li>
@@ -394,18 +421,17 @@ async function premiumUserFunctionality(token) {
           </div>
         </div>`;
 
-      // const leaderboard = document.createElement("button");
-      // leaderboard.innerText = "Leaderboard";
-      // leaderboard.classList.add("leaderboard");
-      // leaderboard.setAttribute("onclick", "showLeaderboard(event)");
-
-      // const downloadFile = document.createElement("button");
-      // downloadFile.innerText = "Download";
-      // downloadFile.classList.add("download");
-      // downloadFile.setAttribute("onclick", "downloadFile(event)");
-      // const premiumButton = document.querySelector(".premiumButton");
-      // premiumButton.append(leaderboard);
-      // premiumButton.append(downloadFile);
+        // <li class="nav-item">
+        //         <a class="nav-link " aria-current="page" onclick="showMonthlyExpense(event)">Monthly Expense</a>
+        //       </li>
+        //       <li class="nav-item">
+        //         <a class="nav-link " aria-current="page" href="#">Yearly Expense</a>
+        //       </li>  <li class="nav-item">
+        //         <a class="nav-link " aria-current="page" onclick="showMonthlyExpense(event)">Monthly Expense</a>
+        //       </li>
+        //       <li class="nav-item">
+        //         <a class="nav-link " aria-current="page" href="#">Yearly Expense</a>
+        //       </li>
     }
   } catch (error) {
     console.log(error.message);
@@ -563,6 +589,6 @@ document
     updatePaginationButton(updateButton);
   });
 
-document.getElementById("logout").addEventListener("click",()=>{
+document.getElementById("logout").addEventListener("click", () => {
   localStorage.removeItem("token");
-})
+});

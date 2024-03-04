@@ -9,7 +9,7 @@ console.log("sdjhb");
 router.post('/signup', userController.signupPost);
 router.post('/signin', userController.signinPost);
 router.post('/password/forget-password', userController.forgetPassword);
-router.get('/password/reset-password/:uuid', userController.getResetPassword);
+// router.get('/password/reset-password', userController.getResetPassword);
 router.post('/password/reset-password/:uuid', userController.postResetPassword);
 
 router.get('/downloadFile', middlewear.authentication, expenseController.downloadFile)

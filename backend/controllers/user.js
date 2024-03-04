@@ -1,7 +1,5 @@
-const nodemailer = require("nodemailer");
 require("dotenv").config();
 
-const Sib = require("sib-api-v3-sdk");
 
 const { v4: uuidv4 } = require("uuid");
 
@@ -104,16 +102,18 @@ exports.signinPost = async (req, res, next) => {
   }
 };
 
-exports.getResetPassword = async (req, res, next) => {
-  try {
-    const filePath = path.join(__dirname, "../../frontend/resetPassword.html");
-    res.sendFile(filePath);
-  } catch (error) {
-    return res.status(500).json({
-      responseMessage: "Something Went Wrong",
-    });
-  }
-};
+// exports.getResetPassword = async (req, res, next) => {
+//   try {
+//     console.log("succ");
+//     const filePath = path.join(__dirname, "../../frontend/resetPassword.html");
+//     console.log(filePath);
+//     res.sendFile(filePath);
+//   } catch (error) {
+//     return res.status(500).json({
+//       responseMessage: "Something Went Wrong",
+//     });
+//   }
+// };
 
 exports.postResetPassword = async (req, res, next) => {
   try {
@@ -201,6 +201,15 @@ exports.forgetPassword = async (req, res, next) => {
 
 
 
+
+
+
+
+
+
+// const nodemailer = require("nodemailer");
+
+// const Sib = require("sib-api-v3-sdk");
 
 
 // Sending email code
